@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <script>document.documentElement.className += ' js';</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaresAgent — 核心特点 | CAIR</title>
+  <meta name="description" content="CaresAgent 的核心特点：执行过程实时呈现、系统托管的实时计划、对外与不可逆操作先经确认，以及项目化工作区、技能包、步骤结果核对与文档解析流程。" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="demo.css" />
+  <script src="dict.js"></script>
+  <script>
+    window.DEMO_EN_META = {
+      title: 'CaresAgent — Core Capabilities | CAIR',
+      description: 'The core capabilities of CaresAgent: an execution process shown in real time, a system-managed live plan, confirmation before external or irreversible actions, plus project workspaces, skill packs, step result checks and a document parsing flow.'
+    };
+    Object.assign(window.DEMO_EN, {
+      'fx.stream.tag': 'Live process',
+      'fx.stream.d': 'Before each tool call, the agent states in one sentence what it is about to do; the tool then runs beneath it. The whole process is kept in full in the session record, so every step of a long task remains readable.',
+      'fx.plan.tag': 'Plan rail',
+      'fx.plan.d': 'The plan holds only human-readable step titles; the running / pending / done states are owned by the system and updated live. The agent reports progress and submits the result of each step; state changes are made by the system, not marked by the agent itself.',
+      'fx.perm.tag': 'Action confirmation',
+      'fx.perm.d': 'Actions with external effect — sending messages, terminal commands, file deletion, printing — ask for your confirmation before they run.',
+      'fx.more.eyebrow': 'More core capabilities',
+      'fx.more.title': 'More <em>capabilities</em>',
+      'fx.c1.t': 'Tool groups in the workspace',
+      'fx.c1.d': 'Tools run inside the project workspace: file writes, searches and deletions only touch that directory, and paths outside it are read-only. Python, terminal and browser tools are available by default, with sensitive calls confirmed one by one through the permission gate; web search is off by default and can be enabled under Settings → Tools.',
+      'fx.c2.t': 'Project-scoped workspace',
+      'fx.c2.d': 'Each project corresponds to one working directory. Everything in a session — the dialogue record, task and plan state, and the produced files — is kept in full, so reopening a session lets you review exactly what happened.',
+      'fx.c3.t': 'Skill packs',
+      'fx.c3.d': 'A skill is a loadable capability package: a model-facing workflow description with declared resources, loaded per task. Five are built in: cair_ai_news, paper_doc, paper_ppt, pdf_screenshot, wechat_draft_box.',
+      'fx.c4.t': 'Step result checks',
+      'fx.c4.d': 'The result of each step is checked first: the agent attaches verifiable evidence — tests, files, logs, screenshots — and only then is the step marked complete and the plan advanced.',
+      'fx.c5.t': 'Document parsing flow',
+      'fx.c5.d': 'Content and layout are handled separately: the PDF structure is read first and the relevant pages identified, only those pages are rendered, then the dedicated CL-OCR takes over — text in reading order, tables as HTML, formulas as LaTeX, figures cropped from the source by layout — before the PPT or Word document is generated, following academic presentation conventions.'
+    });
+  </script>
+</head>
+<body>
+
+
+  <!-- ============ 共享导航（每页一致） ============ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="CaresAgent">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="bm-g" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2450b4"/><stop offset=".48" stop-color="#7a4aa8"/><stop offset="1" stop-color="#d24040"/></linearGradient><clipPath id="bm-c"><rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)"/></clipPath></defs>
+            <rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)" fill="url(#bm-g)"/>
+            <g clip-path="url(#bm-c)"><g transform="rotate(-45 24 24)" fill="#ffffff">
+              <path d="M12.8 15.8 Q12.8 12.8 15.8 12.8 H27.93 V18.325 H19.3 V22.175 H27.93 V27.025 H12.8 Z"/>
+              <path d="M12.8 30.875 H27.93 V35.2 H15.8 Q12.8 35.2 12.8 32.2 Z"/>
+              <path d="M29.83 12.8 H32.2 Q35.2 12.8 35.2 15.8 V18.325 H29.83 Z"/>
+              <path d="M29.83 22.175 H35.2 V32.2 Q35.2 35.2 32.2 35.2 H29.83 Z"/>
+            </g></g>
+          </svg>
+        </span>
+        <span class="brand-word">CaresAgent</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="features.html" data-i18n="nav.features">核心特点</a>
+        <div class="nav-dd">
+          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-dd-menu">
+            <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
+            <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
+            <a href="scene-channels.html"><span data-i18n="sc.channels.t">消息渠道</span></a>
+            <a href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+          </div>
+        </div>
+        <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+        <a href="download.html" data-i18n="nav.download">下载</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to English">
+          <span class="lang-zh" lang="zh-CN">中</span><span class="lang-divider">/</span><span class="lang-en" lang="en">EN</span>
+        </button>
+        <a class="btn btn-primary btn-sm" href="download.html" data-i18n="nav.cta">下载</a>
+        <details class="nav-menu" id="navMenu">
+          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></summary>
+          <div class="nav-menu-panel">
+            <a href="features.html" data-i18n="nav.features">核心特点</a>
+            <a href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+            <a href="scene-office.html" data-i18n="sc.office.t">自动化办公</a>
+            <a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a>
+            <a href="scene-ocr.html" data-i18n="sc.ocr.t">文档解析</a>
+            <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+            <a href="download.html" data-i18n="nav.download">下载</a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="page-hero">
+      <div class="hero-bg" aria-hidden="true"><div class="aurora aurora-a"></div><div class="aurora aurora-b"></div><div class="aurora aurora-c"></div><div class="hero-grid"></div></div>
+      <div class="page-hero-inner">
+        <p class="section-eyebrow reveal" data-i18n="cap.eyebrow">核心特点</p>
+        <h1 class="reveal" data-i18n-html="cap.title">功能与<em>机制</em></h1>
+      </div>
+    </section>
+
+    <!-- ============ 特点一：过程实时呈现 ============ -->
+    <section class="section">
+      <div class="feat-demo reveal">
+        <div class="fd-info">
+          <span class="fd-tag" data-i18n="fx.stream.tag">过程实时呈现</span>
+          <h3 data-i18n="cap.stream.h">过程记录</h3>
+          <p data-i18n="fx.stream.d">每次调用工具前，智能体先用一句话说明接下来要做什么，工具随即在下方运行。全过程完整保存在会话记录中，长任务的每一步始终可读。</p>
+        </div>
+        <div class="cd-canvas"><div class="cv-process">
+          <div class="cv-process-head"><span class="cv-dot is-live"></span><span class="cv-proc-title" data-i18n="cap.stream.h2">运行中</span></div>
+          <div class="cv-feed">
+            <p class="cv-narration shiny" data-i18n="cap.stream.n1">我先解析这篇综述的章节结构和图表位置。</p>
+            <div class="cv-tool"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="tk-ico running"><path d="M6 3.5h7L18 8v12.5H6V3.5Z"/><path d="M13 3.5V8h4.5M9 12.5h6M9 16h4"/></svg><code data-i18n="cap.stream.t1">翻开文档 · review_2026.pdf · 38 页</code></div>
+            <p class="cv-narration" data-i18n="cap.stream.n2">结构清晰，保留 Figure 2/4/7 与 Table 1，开始渲染幻灯片。</p>
+          </div>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ============ 特点二：实时计划 ============ -->
+    <section class="section">
+      <div class="feat-demo reverse reveal">
+        <div class="fd-info">
+          <span class="fd-tag" data-i18n="fx.plan.tag">计划轨道</span>
+          <h3 data-i18n="cap.plan.h">实时计划轨道</h3>
+          <p data-i18n="fx.plan.d">计划只包含人类可读的步骤标题；运行 / 待办 / 完成状态由系统统一掌管并实时更新。智能体逐步汇报进展、提交每一步的结果；状态变更由系统执行，而非由智能体自行标记。</p>
+        </div>
+        <div class="cd-canvas" data-plan-demo><div class="cd-plan">
+          <div class="cd-plan-step"><span class="pico"></span><span data-i18n="plan.s1">解析 PDF 结构</span></div>
+          <div class="cd-plan-step"><span class="pico"></span><span data-i18n="plan.s2">截取论文图表</span></div>
+          <div class="cd-plan-step"><span class="pico"></span><span data-i18n="plan.s3">生成大纲与分页</span></div>
+          <div class="cd-plan-step"><span class="pico"></span><span data-i18n="plan.s4">渲染 PPTX</span></div>
+          <div class="cd-plan-step"><span class="pico"></span><span data-i18n="plan.s5">质量校验</span></div>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- ============ 特点三：操作确认 ============ -->
+    <section class="section">
+      <div class="feat-demo reveal">
+        <div class="fd-info">
+          <span class="fd-tag" data-i18n="fx.perm.tag">操作确认</span>
+          <h3 data-i18n="cap.perm.h">操作确认</h3>
+          <p data-i18n="fx.perm.d">对外发送、终端命令、文件删除、打印等操作，会先征询你的确认再执行。</p>
+        </div>
+        <div class="cd-perm" data-perm-demo>
+          <span class="pg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 5 6.5v5c0 4.2 3 7.6 7 9 4-1.4 7-4.8 7-9v-5l-7-3Z"/><path d="M12 8.5v4M12 15v.5"/></svg></span>
+          <span class="pg-main"><span class="pg-label" data-i18n="perm.label">发送这条微信消息？</span><span class="pg-sub" data-i18n="perm.wait">等待授权</span></span>
+          <button class="pg-deny" data-i18n="perm.deny">拒绝</button>
+          <button class="pg-allow" data-i18n="perm.btn">仅此一次</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 更多核心能力 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <p class="section-eyebrow" data-i18n="fx.more.eyebrow">更多核心能力</p>
+        <h2 class="section-title" data-i18n-html="fx.more.title">更多<em>核心能力</em></h2>
+      </div>
+      <div class="ladder reveal" style="max-width:760px">
+        <div class="ladder-step">
+          <h3 data-i18n="fx.c1.t">工作区内的工具组</h3>
+          <p data-i18n="fx.c1.d">工具在项目工作区内运行：文件写入、搜索、删除只作用于该目录，目录之外的路径只读。Python、终端、浏览器等工具默认可用，敏感调用逐次经权限确认；联网搜索默认关闭，可在设置的工具配置中开启。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="fx.c2.t">项目化工作区</h3>
+          <p data-i18n="fx.c2.d">一个项目对应一个工作目录。每个会话的全部内容（对话记录、任务与计划状态、产出的文件）完整留存，重开会话即可回看当时发生的一切。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="fx.c3.t">技能包</h3>
+          <p data-i18n="fx.c3.d">技能是可加载的能力包：一份面向模型的工作流说明，附声明的资源，按任务加载。已内置 5 个：cair_ai_news、paper_doc、paper_ppt、pdf_screenshot、wechat_draft_box。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="fx.c4.t">步骤结果核对</h3>
+          <p data-i18n="fx.c4.d">每一步的结果都先经核对：智能体附上可核对的依据（测试、文件、日志、截图），该步骤才标记完成，计划随后推进。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="fx.c5.t">文档解析流程</h3>
+          <p data-i18n="fx.c5.d">内容与版面分开处理：先读取 PDF 结构、确定需要处理的页面，仅渲染这些页，再交给专用 CL-OCR：正文按阅读顺序、表格转 HTML、公式转 LaTeX，图表按版面裁出原图；最后生成 PPT 或 Word 文档，版式遵循学术汇报惯例。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 会话留存收尾 ============ -->
+    <section class="section">
+      <div class="scene-result reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 5 6.5v5c0 4.2 3 7.6 7 9 4-1.4 7-4.8 7-9v-5l-7-3Z"/><path d="m9.2 11.8 2 2 3.6-3.8"/></svg></span>
+        <p><b data-i18n="cap.audit.h">会话全程留存</b><span data-i18n="cap.audit.d"> 每一次工具调用、每一个决策与授权都完整保存在会话记录中，可随时回看复查。完整机制见「系统原理」页。</span> <a class="btn btn-ghost btn-sm" href="architecture.html" data-i18n="cap.audit.link">系统原理 →</a></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 共享页脚 ============ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/cair-logo.png" alt="CAIR" class="footer-logo" />
+        <p class="footer-org">中国科学院香港创新研究院人工智能与机器人创新中心</p>
+        <p class="footer-org-en" lang="en">Centre for Artificial Intelligence and Robotics,<br />Hong Kong Institute of Science &amp; Innovation, Chinese Academy of Sciences</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col"><h4 data-i18n="ft.product">产品</h4><a href="features.html" data-i18n="nav.features">核心特点</a><a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a><a href="architecture.html" data-i18n="nav.arch">系统原理</a><a href="download.html" data-i18n="nav.download">下载</a></div>
+        <div class="footer-col"><h4 data-i18n="ft.org">机构</h4><a href="https://www.cair-cas.org.hk/" target="_blank" rel="noopener" data-i18n="ft.cair">CAIR 官网</a><a href="mailto:enquiry@cair-cas.org.hk">enquiry@cair-cas.org.hk</a><p class="footer-cap" data-i18n="ft.dev">联系开发者</p><a href="mailto:wenzhuoliu2020@gmail.com">wenzhuoliu2020@gmail.com</a></div>
+        <div class="footer-col footer-addr"><h4 data-i18n="ft.contact">联系地址</h4><p data-i18n="ft.addr">香港新界白石角香港科学园科技大道西 17W 大楼 3 楼</p></div>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <p><span data-i18n="ft.copy">© 2026 中国科学院香港创新研究院人工智能与机器人创新中心</span> <span data-i18n="ft.rights">保留所有权利。</span></p>
+      <p class="footer-tag" lang="en">We Advance AI and Robotics for a Healthier Future</p>
+    </div>
+  </footer>
+
+  <script src="demo.js"></script>
+</body>
+</html>

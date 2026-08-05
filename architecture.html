@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <script>document.documentElement.className += ' js';</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaresAgent — 系统设计原理</title>
+  <meta name="description" content="CaresAgent 的系统架构：Project → Session → Turn → Run 四层生命周期；Agent 组合上下文、Tool 与 Skill；Policy 逐调用判定，Approval 处理 ask；类型化 Event 投影为 Timeline。" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="demo.css" />
+  <script src="dict.js"></script>
+  <script>
+    window.DEMO_EN_META = {
+      title: 'CaresAgent — System design / architecture',
+      description: 'The CaresAgent architecture: Project → Session → Turn → Run lifecycles; an Agent combines context, Tools and Skills; Policy decides each call and Approval handles ask; typed Events project into the Timeline.'
+    };
+  </script>
+  <script>Object.assign(window.DEMO_EN, {
+    'arx.loop.title': 'The components',
+    'arx.loop.sub': 'Following the diagram, part by part.',
+    'arx.loop.p1': 'Project owns the workspace and project configuration; Session durably owns the conversation, permissions and enabled Skills; one user message creates a Turn; one execution attempt is a Run. A Run can execute, block for approval, resume or be cancelled, then settle its result back into the Session.',
+    'arx.loop.p2': 'The Agent performs model reasoning, with context, available Tools and Skills injected by the runtime. A Skill supplies instructions and resources. Every Tool call is evaluated by <code>Policy</code> against the ToolDefinition, arguments, session mode and rules as allow / ask / deny; only ask goes to <code>Approval</code> for your decision.',
+    'arx.loop.p3': 'Execution publishes typed Events for model activity, tools, permissions, progress, artifacts, outbound actions and lifecycle changes. Events append to the per-session trace; a deterministic reducer projects them into the Timeline, which the API / SSE layer exposes to clients. Development writes stay under the root .caresagent/; packaged builds use the OS user-data directory; bundled configuration and Skills load read-only from backend/resources/.',
+    'arx.tools.title': 'The Tool layer',
+    'arx.tools.sub': 'A Tool is an executable capability with a stable definition, organised as definition, catalog, resolver and executor.',
+    'arx.tools.t1': 'ToolDefinition',
+    'arx.tools.d1': 'Declares a Tool’s stable description: name, group, parameter and side-effect identifiers, and concurrency and interruption semantics.',
+    'arx.tools.t2': 'Tool Catalog',
+    'arx.tools.d2': 'A one-time index of all Tool definitions, used for discovery and diagnostics.',
+    'arx.tools.t3': 'Tool Resolver',
+    'arx.tools.d3': 'Builds the tool set available to each Turn from configuration and runtime context.',
+    'arx.tools.t4': 'Tool Executor',
+    'arx.tools.d4': 'Validates handlers and funnels synchronous and asynchronous calls through one entry point.',
+    'arx.tools.t5': 'Files and the workspace',
+    'arx.tools.d5': 'File Tools read and write inside the project workspace; configured paths outside it are read-only.',
+    'arx.tools.t6': 'Documents + media',
+    'arx.tools.d6': 'Office document generation, PDF parsing and rendering, visual reasoning and CL-OCR recognition.',
+    'arx.tools.t7': 'Web acquisition',
+    'arx.tools.d7': 'Web search and browsing, structured article collection, file download.',
+    'arx.tools.t8': 'Product feature · CAIR AI News',
+    'arx.tools.d8': 'Combines prepared article content and figures into an HTML page and an editable Word document.',
+    'arx.tools.t9': 'Platform integrations',
+    'arx.tools.d9': 'Official-Account publishing, WeCom and WeChat sending, Tencent Meeting, printing.',
+    'arx.tools.t10': 'Policy + Approval',
+    'arx.tools.d10': 'Policy returns allow / ask / deny for each call; on ask, execution pauses until Approval decides.',
+    'arx.skills.eyebrow': 'Skill layer',
+    'arx.skills.title': 'Loadable instructions and resources',
+    'arx.skills.sub': 'A Skill is a loadable package of instructions and resources: once enabled it is kept with the session, and its instructions are injected into the agent’s context at execution time.',
+    'arx.skills.ships': 'Five are built in:',
+    'arx.skills.list': 'cair_ai_news · paper_doc · paper_ppt · pdf_screenshot · wechat_draft_box'
+  });</script>
+</head>
+<body>
+
+
+  <!-- ============ 共享导航（每页一致） ============ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="CaresAgent">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="bm-g" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2450b4"/><stop offset=".48" stop-color="#7a4aa8"/><stop offset="1" stop-color="#d24040"/></linearGradient><clipPath id="bm-c"><rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)"/></clipPath></defs>
+            <rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)" fill="url(#bm-g)"/>
+            <g clip-path="url(#bm-c)"><g transform="rotate(-45 24 24)" fill="#ffffff">
+              <path d="M12.8 15.8 Q12.8 12.8 15.8 12.8 H27.93 V18.325 H19.3 V22.175 H27.93 V27.025 H12.8 Z"/>
+              <path d="M12.8 30.875 H27.93 V35.2 H15.8 Q12.8 35.2 12.8 32.2 Z"/>
+              <path d="M29.83 12.8 H32.2 Q35.2 12.8 35.2 15.8 V18.325 H29.83 Z"/>
+              <path d="M29.83 22.175 H35.2 V32.2 Q35.2 35.2 32.2 35.2 H29.83 Z"/>
+            </g></g>
+          </svg>
+        </span>
+        <span class="brand-word">CaresAgent</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="features.html" data-i18n="nav.features">核心特点</a>
+        <div class="nav-dd">
+          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-dd-menu">
+            <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
+            <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
+            <a href="scene-channels.html"><span data-i18n="sc.channels.t">消息渠道</span></a>
+            <a href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+          </div>
+        </div>
+        <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+        <a href="download.html" data-i18n="nav.download">下载</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to English">
+          <span class="lang-zh" lang="zh-CN">中</span><span class="lang-divider">/</span><span class="lang-en" lang="en">EN</span>
+        </button>
+        <a class="btn btn-primary btn-sm" href="download.html" data-i18n="nav.cta">下载</a>
+        <details class="nav-menu" id="navMenu">
+          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></summary>
+          <div class="nav-menu-panel">
+            <a href="features.html" data-i18n="nav.features">核心特点</a>
+            <a href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+            <a href="scene-office.html" data-i18n="sc.office.t">自动化办公</a>
+            <a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a>
+            <a href="scene-ocr.html" data-i18n="sc.ocr.t">文档解析</a>
+            <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+            <a href="download.html" data-i18n="nav.download">下载</a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ 内页 HERO ============ -->
+    <section class="page-hero">
+      <div class="hero-bg" aria-hidden="true"><div class="aurora aurora-a"></div><div class="aurora aurora-b"></div><div class="aurora aurora-c"></div><div class="hero-grid"></div></div>
+      <div class="page-hero-inner">
+        <p class="section-eyebrow reveal" data-i18n="arch.eyebrow">系统设计</p>
+        <h1 class="reveal" data-i18n-html="arch.title">生命周期与<em>执行链</em></h1>
+        <p class="page-lead reveal" data-i18n="arch.lead">Project、Session、Turn、Run 各自管理明确的状态；Run 内由 Agent 组合上下文、Tool 与 Skill，Policy 逐调用判定、Approval 处理 ask，再把类型化 Event 投影成 Timeline。</p>
+      </div>
+    </section>
+
+    <!-- ============ 执行链路 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <h2 class="section-title" data-i18n="arch.flow.title">从 Project 到 Timeline</h2>
+        <p class="section-sub" data-i18n="arch.flow.sub">Project → Session → Turn → Run；Run 内由 Agent 结合上下文与 Skill 调用 Tool，Policy 对每次调用做 allow / ask / deny，Approval 只处理 ask，类型化 Event 最终投影为 Timeline。</p>
+      </div>
+      <div class="arch-flow reveal">
+        <div class="arch-node"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h8.5L19 8v12.5H6V3.5Z"/><path d="M14 3.5V8h4.5M9 12.5h6M9 16h4"/></svg></span><span class="an-label" data-i18n="arch.n.task">Project</span><span class="an-sub" data-i18n="arch.n.task2">工作区 + 配置</span></div>
+        <span class="arch-arrow"><svg viewBox="0 0 20 14" fill="none"><path d="M2 7h14m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="arch-node"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4.5h14v15H5z"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4"/></svg></span><span class="an-label" data-i18n="arch.n.context">Session</span><span class="an-sub" data-i18n="arch.n.context2">历史 + 权限</span></div>
+        <span class="arch-arrow"><svg viewBox="0 0 20 14" fill="none"><path d="M2 7h14m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="arch-node"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a4 4 0 0 1 4 4 3.5 3.5 0 0 1 .5 6.8A3.5 3.5 0 0 1 12 19a3.5 3.5 0 0 1-4.5-4.2A3.5 3.5 0 0 1 8 8a4 4 0 0 1 4-4Z"/><path d="M12 4v15"/></svg></span><span class="an-label" data-i18n="arch.n.agent">Turn</span><span class="an-sub" data-i18n="arch.n.agent2">一次用户请求</span></div>
+        <span class="arch-arrow"><svg viewBox="0 0 20 14" fill="none"><path d="M2 7h14m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="arch-node"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z"/></svg></span><span class="an-label" data-i18n="arch.n.action">Run</span><span class="an-sub" data-i18n="arch.n.action2">一次执行尝试</span></div>
+        <span class="arch-arrow"><svg viewBox="0 0 20 14" fill="none"><path d="M2 7h14m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="arch-node guard"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 5 6.5v5c0 4.2 3 7.6 7 9 4-1.4 7-4.8 7-9v-5l-7-3Z"/><path d="m9.2 11.8 2 2 3.6-3.8"/></svg></span><span class="an-label" data-i18n="arch.n.guard">Agent</span><span class="an-sub" data-i18n="arch.n.guard2">上下文 + Skill</span></div>
+        <span class="arch-arrow"><svg viewBox="0 0 20 14" fill="none"><path d="M2 7h14m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="arch-node"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4.5 19.5 9.5M3.5 20.5l1.2-4 11-11 2.8 2.8-11 11-4 1.2Z"/></svg></span><span class="an-label" data-i18n="arch.n.tool">Tool</span><span class="an-sub" data-i18n="arch.n.tool2">类型化调用</span></div>
+        <span class="arch-arrow"><svg viewBox="0 0 20 14" fill="none"><path d="M2 7h14m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="arch-node"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 20 7.5v9L12 20.5 4 16.5v-9L12 3.5Z"/><path d="m4 7.5 8 4 8-4M12 11.5v9"/></svg></span><span class="an-label" data-i18n="arch.n.runtime">Policy</span><span class="an-sub" data-i18n="arch.n.runtime2">逐调用判定</span></div>
+        <span class="arch-arrow"><svg viewBox="0 0 20 14" fill="none"><path d="M2 7h14m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="arch-node"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5 12 5s9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7Z"/><circle cx="12" cy="12" r="2.6"/></svg></span><span class="an-label" data-i18n="arch.n.obs">Approval</span><span class="an-sub" data-i18n="arch.n.obs2">仅 ask 等待</span></div>
+        <span class="arch-arrow"><svg viewBox="0 0 20 14" fill="none"><path d="M2 7h14m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="arch-node"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5 11 14.5 15.5 10M12 3.5l2.3 1.7 2.8-.4 1 2.7 2.4 1.6-.9 2.7.9 2.7-2.4 1.6-1 2.7-2.8-.4L12 20.5l-2.3-1.7-2.8.4-1-2.7L3.5 15l.9-2.7-.9-2.7 2.4-1.6 1-2.7 2.8.4L12 3.5Z"/></svg></span><span class="an-label" data-i18n="arch.n.eval">Event</span><span class="an-sub" data-i18n="arch.n.eval2">类型化事实</span></div>
+        <span class="arch-arrow"><svg viewBox="0 0 20 14" fill="none"><path d="M2 7h14m0 0-5-5m5 5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div class="arch-node"><span class="an-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h8.5L19 8v12.5H6V3.5Z"/><path d="M14 3.5V8h4.5M9 13l1.8 1.8L14 11"/></svg></span><span class="an-label" data-i18n="arch.n.report">Timeline</span><span class="an-sub" data-i18n="arch.n.report2">确定性投影</span></div>
+      </div>
+      <p class="arch-loopnote reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/></svg><span data-i18n="arch.loop">一个 Run 可因 ask 阻塞，并在批准或拒绝后恢复，也可被取消；结算状态写回 Session。</span></p>
+    </section>
+
+    <!-- ============ 这条链路在做什么（散文解释） ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <h2 class="section-title" data-i18n="arx.loop.title">各个组成部分</h2>
+        <p class="section-sub" data-i18n="arx.loop.sub">对照上图逐一说明。</p>
+      </div>
+      <div class="feat-demo" style="grid-template-columns:1fr;max-width:780px;margin-left:auto;margin-right:auto">
+        <div class="fd-info">
+          <p class="reveal" data-i18n-html="arx.loop.p1">Project 拥有工作区与项目配置；Session 持久保存对话、权限和已启用 Skill；一条用户消息形成一个 Turn；一次具体执行是一个 Run。Run 可以执行、因授权而阻塞、恢复或取消，结算后再把结果写回 Session。</p>
+          <p class="reveal" style="margin-top:14px" data-i18n-html="arx.loop.p2">Agent 进行模型推理，由运行时注入上下文、可用 Tool 与 Skill。Skill 提供指令和资源。每个 Tool 调用都会由 <code>Policy</code> 根据 ToolDefinition、参数、会话模式与规则给出 allow / ask / deny；只有 ask 才进入 <code>Approval</code> 等待用户决定。</p>
+          <p class="reveal" style="margin-top:14px" data-i18n-html="arx.loop.p3">执行过程发布模型、工具、权限、进度、产物、对外动作与生命周期等类型化 Event。事件追加到会话 trace，再由确定性 reducer 投影成 Timeline，通过 API / SSE 提供给客户端。开发态写入根目录 .caresagent/，打包态写入操作系统用户数据目录；内置配置与 Skill 从 backend/resources/ 只读加载。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 工具与运行时 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <h2 class="section-title" data-i18n="arx.tools.title">Tool 层</h2>
+        <p class="section-sub" data-i18n="arx.tools.sub">Tool 是带稳定定义的可执行能力，由定义、目录、解析与执行四个部分组成。</p>
+      </div>
+      <div class="ladder reveal" style="max-width:760px">
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t1">ToolDefinition</h3>
+          <p data-i18n="arx.tools.d1">声明一个 Tool 的稳定描述：名称、分组、参数与副作用标识，以及并发与中断语义。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t2">Tool Catalog</h3>
+          <p data-i18n="arx.tools.d2">对全部 Tool 定义做一次性索引，用于发现与诊断。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t3">Tool Resolver</h3>
+          <p data-i18n="arx.tools.d3">每个 Turn 根据配置与运行上下文构建当次可用的工具集。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t4">Tool Executor</h3>
+          <p data-i18n="arx.tools.d4">校验处理器，并把同步与异步调用收敛到同一入口执行。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t5">文件与工作区</h3>
+          <p data-i18n="arx.tools.d5">文件类 Tool 在项目工作区内读写；工作区之外的配置路径为只读。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t6">文档 + 媒体</h3>
+          <p data-i18n="arx.tools.d6">Office 文档生成、PDF 解析与渲染、视觉理解与 CL-OCR 识别。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t7">网络采集</h3>
+          <p data-i18n="arx.tools.d7">网页搜索与浏览、结构化文章采集、文件下载。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t8">产品能力 · CAIR AI 资讯</h3>
+          <p data-i18n="arx.tools.d8">把整理好的文章内容与配图组合成 HTML 页面和可编辑的 Word 文档。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t9">平台集成</h3>
+          <p data-i18n="arx.tools.d9">公众号发布、企业微信与个人微信发送、腾讯会议、打印。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="arx.tools.t10">Policy + Approval</h3>
+          <p data-i18n="arx.tools.d10">Policy 为每次调用给出 allow / ask / deny；ask 时暂停执行，待 Approval 决定后继续。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 技能包系统 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <p class="section-eyebrow" data-i18n="arx.skills.eyebrow">Skill 层</p>
+        <h2 class="section-title" data-i18n="arx.skills.title">可加载的指令与资源</h2>
+        <p class="section-sub" data-i18n-html="arx.skills.sub">Skill 是可加载的指令与资源包：启用后随会话保存，执行时把说明注入智能体上下文。</p>
+      </div>
+      <div class="feat-demo reveal" style="grid-template-columns:1fr;max-width:780px;margin-left:auto;margin-right:auto;margin-top:34px">
+        <div class="fd-info" style="text-align:center">
+          <span class="fd-tag" style="margin-left:auto;margin-right:auto" data-i18n="arx.skills.ships">已内置 5 个：</span>
+          <p style="font-family:var(--font-mono);font-size:13px;line-height:1.9;color:var(--ink-1)" data-i18n="arx.skills.list">cair_ai_news · paper_doc · paper_ppt · pdf_screenshot · wechat_draft_box</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 设计原理 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <h2 class="section-title" data-i18n="arch.principles.title">设计原理</h2>
+      </div>
+      <div class="arch-principles">
+        <div class="arch-principle reveal">
+          <div class="ap-head"><span class="ap-ico i-blue" style="background:rgba(43,98,198,0.09);color:#2b62c6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 20 7.5v9L12 20.5 4 16.5v-9L12 3.5Z"/><path d="m4 7.5 8 4 8-4M12 11.5v9"/></svg></span><h3 data-i18n="arch.p1t">四层生命周期</h3></div>
+          <p data-i18n="arch.p1d">Project 管工作区与配置，Session 管持久会话状态，Turn 对应一条用户消息，Run 对应一次可阻塞、恢复或取消的执行尝试。</p>
+        </div>
+        <div class="arch-principle reveal">
+          <div class="ap-head"><span class="ap-ico i-violet" style="background:rgba(98,71,168,0.09);color:#6247a8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h9"/><circle cx="18" cy="18" r="2.6"/></svg></span><h3 data-i18n="arch.p2t">Agent / Tool / Skill 分层</h3></div>
+          <p data-i18n="arch.p2d">Agent 进行推理，Tool 执行操作，Skill 提供可加载的指令与资源；三者独立演进、独立测试。</p>
+        </div>
+        <div class="arch-principle reveal">
+          <div class="ap-head"><span class="ap-ico i-red" style="background:rgba(192,58,72,0.08);color:#c03a48"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5 11 14.5 15.5 10"/><circle cx="12" cy="12" r="8.5"/></svg></span><h3 data-i18n="arch.p3t">逐调用 Policy / Approval</h3></div>
+          <p data-i18n="arch.p3d">ToolDefinition、实参、会话模式与规则共同产生 allow / ask / deny；只有 ask 进入用户批准流程并支持恢复。</p>
+        </div>
+        <div class="arch-principle reveal">
+          <div class="ap-head"><span class="ap-ico i-violet" style="background:rgba(98,71,168,0.09);color:#6247a8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 5 6.5v5c0 4.2 3 7.6 7 9 4-1.4 7-4.8 7-9v-5l-7-3Z"/><path d="m9.2 11.8 2 2 3.6-3.8"/></svg></span><h3 data-i18n="arch.p4t">类型化 Event → Timeline</h3></div>
+          <p data-i18n-html="arch.p4d">运行时发布类型化 <code>Event</code>，先追加到会话日志，再由确定性 reducer 投影成 <code>Timeline</code>；客户端消费投影，不重做领域判断。</p>
+        </div>
+        <div class="arch-principle reveal">
+          <div class="ap-head"><span class="ap-ico i-blue" style="background:rgba(43,98,198,0.09);color:#2b62c6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5 12 3l8 3.5v11L12 21l-8-3.5v-11Z"/><path d="M9 11.5h6M9 14.5h4"/></svg></span><h3 data-i18n="arch.p5t">状态与资源分离</h3></div>
+          <p data-i18n="arch.p5d">运行数据保存在应用数据目录；内置配置与 Skill 随安装包提供。</p>
+        </div>
+        <div class="arch-principle reveal">
+          <div class="ap-head"><span class="ap-ico i-red" style="background:rgba(192,58,72,0.08);color:#c03a48"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="11" rx="1.5"/><path d="M8.5 19.5h7M12 15.5v4"/></svg></span><h3 data-i18n="arch.p6t">一个 API，多端适配</h3></div>
+          <p data-i18n="arch.p6d">caresagent.api.app:app 是唯一 ASGI 组合入口；桌面端与消息渠道复用同一套应用服务、Policy 和 Event 契约。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 会话事件记录终端（装饰） ============ -->
+    <section class="section">
+      <div class="terminal reveal">
+        <div class="terminal-bar">
+          <span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span>
+          <span class="terminal-title">.caresagent/state/projects/…/sessions/…/trace.jsonl</span>
+        </div>
+        <pre class="terminal-body"><code><span class="t-dim">{</span><span class="t-blue">"type"</span><span class="t-dim">:</span><span class="t-green">"tool_call"</span><span class="t-dim">,</span> <span class="t-blue">"message"</span><span class="t-dim">:</span><span class="t-violet">"Tool call requested"</span><span class="t-dim">,</span> <span class="t-blue">"tool"</span><span class="t-dim">:</span><span class="t-green">"view_workspace_file"</span><span class="t-dim">,</span> <span class="t-blue">"arguments"</span><span class="t-dim">:</span><span class="t-green">{"path":"review_2026.pdf"}</span><span class="t-dim">}</span>
+<span class="t-dim">{</span><span class="t-blue">"type"</span><span class="t-dim">:</span><span class="t-green">"permission_required"</span><span class="t-dim">,</span> <span class="t-blue">"message"</span><span class="t-dim">:</span><span class="t-amber">"Permission required: Shell"</span><span class="t-dim">,</span> <span class="t-blue">"tool"</span><span class="t-dim">:</span><span class="t-green">"execute_shell_command"</span><span class="t-dim">,</span> <span class="t-blue">"specifier"</span><span class="t-dim">:</span><span class="t-green">"python crop_figures.py"</span><span class="t-dim">}</span>
+<span class="t-dim">{</span><span class="t-blue">"type"</span><span class="t-dim">:</span><span class="t-green">"permission_granted"</span><span class="t-dim">,</span> <span class="t-blue">"message"</span><span class="t-dim">:</span><span class="t-green">"Permission granted"</span><span class="t-dim">,</span> <span class="t-blue">"tool"</span><span class="t-dim">:</span><span class="t-green">"execute_shell_command"</span><span class="t-dim">,</span> <span class="t-blue">"permission_key"</span><span class="t-dim">:</span><span class="t-green">"execute_shell_command(*)"</span><span class="t-dim">,</span> <span class="t-blue">"session_turn"</span><span class="t-dim">:</span><span class="t-green">7</span><span class="t-dim">}</span>
+<span class="t-dim">{</span><span class="t-blue">"type"</span><span class="t-dim">:</span><span class="t-green">"artifacts"</span><span class="t-dim">,</span> <span class="t-blue">"message"</span><span class="t-dim">:</span><span class="t-violet">"Workspace artifacts updated"</span><span class="t-dim">,</span> <span class="t-blue">"files"</span><span class="t-dim">:</span><span class="t-green">["slides_draft.pptx"]</span><span class="t-dim">,</span> <span class="t-blue">"session_turn"</span><span class="t-dim">:</span><span class="t-green">7</span><span class="t-dim">}</span>
+<span class="t-dim">{</span><span class="t-blue">"type"</span><span class="t-dim">:</span><span class="t-green">"turn_completed"</span><span class="t-dim">,</span> <span class="t-blue">"message"</span><span class="t-dim">:</span><span class="t-red">"Turn completed"</span><span class="t-dim">,</span> <span class="t-blue">"session_id"</span><span class="t-dim">:</span><span class="t-green">"session_01"</span><span class="t-dim">,</span> <span class="t-blue">"session_turn"</span><span class="t-dim">:</span><span class="t-red">7</span><span class="t-dim">,</span> <span class="t-blue">"run_id"</span><span class="t-dim">:</span><span class="t-green">"run_01"</span><span class="t-dim">}</span></code></pre>
+      </div>
+    </section>
+
+    <!-- ============ 克制的下一步（取代重复的大卡片） ============ -->
+    <div class="next-row reveal">
+      <span class="nr-label" data-i18n="next.label">进一步了解：</span>
+      <a class="btn btn-ghost btn-sm" href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+      <a class="btn btn-ghost btn-sm" href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a>
+      <a class="btn btn-ghost btn-sm" href="download.html" data-i18n="nav.download">下载</a>
+    </div>
+  </main>
+
+  <!-- ============ 共享页脚 ============ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/cair-logo.png" alt="CAIR" class="footer-logo" />
+        <p class="footer-org">中国科学院香港创新研究院人工智能与机器人创新中心</p>
+        <p class="footer-org-en" lang="en">Centre for Artificial Intelligence and Robotics,<br />Hong Kong Institute of Science &amp; Innovation, Chinese Academy of Sciences</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col"><h4 data-i18n="ft.product">产品</h4><a href="features.html" data-i18n="nav.features">核心特点</a><a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a><a href="architecture.html" data-i18n="nav.arch">系统原理</a><a href="download.html" data-i18n="nav.download">下载</a></div>
+        <div class="footer-col"><h4 data-i18n="ft.org">机构</h4><a href="https://www.cair-cas.org.hk/" target="_blank" rel="noopener" data-i18n="ft.cair">CAIR 官网</a><a href="mailto:enquiry@cair-cas.org.hk">enquiry@cair-cas.org.hk</a><p class="footer-cap" data-i18n="ft.dev">联系开发者</p><a href="mailto:wenzhuoliu2020@gmail.com">wenzhuoliu2020@gmail.com</a></div>
+        <div class="footer-col footer-addr"><h4 data-i18n="ft.contact">联系地址</h4><p data-i18n="ft.addr">香港新界白石角香港科学园科技大道西 17W 大楼 3 楼</p></div>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <p><span data-i18n="ft.copy">© 2026 中国科学院香港创新研究院人工智能与机器人创新中心</span> <span data-i18n="ft.rights">保留所有权利。</span></p>
+      <p class="footer-tag" lang="en">We Advance AI and Robotics for a Healthier Future</p>
+    </div>
+  </footer>
+
+  <script src="demo.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <script>document.documentElement.className += ' js';</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaresAgent — 场景 · 科研产出</title>
+  <meta name="description" content="科研产出场景：智能体将论文 PDF 整理成研究汇报 PPT 与分析报告。CL-OCR 提取正文、表格与公式，图表按版面坐标取自原文，结论注明出处，会话全程留存、可以回看。" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="demo.css" />
+  <script src="dict.js"></script>
+  <script>
+    window.DEMO_EN_META = {
+      title: 'CaresAgent — Scenario · Research output',
+      description: 'Research output scenario: the agent turns a paper PDF into a research presentation and an analysis report. CL-OCR extracts text, tables and formulas, figures are cropped from the paper by layout coordinates, conclusions note their sources, and the full session is kept for later review.'
+    };
+  </script>
+  <script>Object.assign(window.DEMO_EN, {
+    'srx.bg.eyebrow': 'Background',
+    'srx.bg.title': 'Three common problems',
+    'srx.bg.sub': 'When a general-purpose conversational AI is used to prepare a research presentation, three problems come up repeatedly.',
+    'srx.bg.t1': 'Figure sources are unreliable',
+    'srx.bg.d1': 'Asked for “the figure from the paper”, a general chatbot typically generates an approximate illustration: its axes, curves and numbers do not come from the paper itself, so it cannot be used in a formal report.',
+    'srx.bg.t2': 'Layout differs from academic conventions',
+    'srx.bg.d2': 'Generated slides often carry obvious template traits that do not match the conventions of academic presentations, and the deck has to be re-laid-out by hand.',
+    'srx.bg.t3': 'Conclusions lack checkable sources',
+    'srx.bg.d3': 'Numbers and citations arrive without noting which page, which table or which computation they come from, so each item has to be re-verified before use.',
+    'srx.s1d': 'After the PDF is imported, the agent reads the full text — section structure, figure and table positions, citation context — then writes an outline and decides which pages need rendering.',
+    'srx.s2d': 'The selected pages are rendered and handed to the dedicated CL-OCR: body text, tables (HTML) and formulas (LaTeX) are extracted, and the paper’s own figures are cropped by layout coordinates. Numeric results are re-checked with Python inside the project workspace.',
+    'srx.s3d': 'The deck and the report are generated. Each conclusion notes the page, figure or data file it rests on and can be checked item by item; the layout follows academic presentation conventions.',
+    'srx.diff.eyebrow': 'Design',
+    'srx.diff.title': 'How it works',
+    'srx.diff.sub': 'Figures are cropped from the paper by layout coordinates; results are checked before being marked complete; the full process is kept on record.',
+    'srx.diff.t1': 'Figures come from the paper',
+    'srx.diff.d1': 'Every figure is cropped by CL-OCR from the paper’s rendered pages by layout coordinates, so each figure in the deck is the paper’s own.',
+    'srx.diff.t2': 'Results are checked before completion',
+    'srx.diff.d2': 'Each step’s result is checked against the produced files, data and rendered output; only after the check passes is the step marked complete and the next one started.',
+    'srx.diff.t3': 'The process is kept in full',
+    'srx.diff.d3': 'The session is kept in full and can be revisited; how each deliverable was produced can be re-examined at any time.',
+    'srx.note.diff': '<b>In summary:</b> figures and tables come from the paper itself; each step’s result is checked before it is marked complete; the session is kept in full, so the origin of every deliverable can be re-examined.',
+    'srx.note.limit': '<b>Note:</b> recognition of complex formulas or unusual layouts may need a manual check; the output is a presentation draft intended for further editing.'
+  });</script>
+</head>
+<body>
+
+
+  <!-- ============ 共享导航（每页一致） ============ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="CaresAgent">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="bm-g" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2450b4"/><stop offset=".48" stop-color="#7a4aa8"/><stop offset="1" stop-color="#d24040"/></linearGradient><clipPath id="bm-c"><rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)"/></clipPath></defs>
+            <rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)" fill="url(#bm-g)"/>
+            <g clip-path="url(#bm-c)"><g transform="rotate(-45 24 24)" fill="#ffffff">
+              <path d="M12.8 15.8 Q12.8 12.8 15.8 12.8 H27.93 V18.325 H19.3 V22.175 H27.93 V27.025 H12.8 Z"/>
+              <path d="M12.8 30.875 H27.93 V35.2 H15.8 Q12.8 35.2 12.8 32.2 Z"/>
+              <path d="M29.83 12.8 H32.2 Q35.2 12.8 35.2 15.8 V18.325 H29.83 Z"/>
+              <path d="M29.83 22.175 H35.2 V32.2 Q35.2 35.2 32.2 35.2 H29.83 Z"/>
+            </g></g>
+          </svg>
+        </span>
+        <span class="brand-word">CaresAgent</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="features.html" data-i18n="nav.features">核心特点</a>
+        <div class="nav-dd">
+          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-dd-menu">
+            <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
+            <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
+            <a href="scene-channels.html"><span data-i18n="sc.channels.t">消息渠道</span></a>
+            <a href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+          </div>
+        </div>
+        <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+        <a href="download.html" data-i18n="nav.download">下载</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to English">
+          <span class="lang-zh" lang="zh-CN">中</span><span class="lang-divider">/</span><span class="lang-en" lang="en">EN</span>
+        </button>
+        <a class="btn btn-primary btn-sm" href="download.html" data-i18n="nav.cta">下载</a>
+        <details class="nav-menu" id="navMenu">
+          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></summary>
+          <div class="nav-menu-panel">
+            <a href="features.html" data-i18n="nav.features">核心特点</a>
+            <a href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+            <a href="scene-office.html" data-i18n="sc.office.t">自动化办公</a>
+            <a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a>
+            <a href="scene-ocr.html" data-i18n="sc.ocr.t">文档解析</a>
+            <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+            <a href="download.html" data-i18n="nav.download">下载</a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="page-hero">
+      <div class="hero-bg" aria-hidden="true"><div class="aurora aurora-a"></div><div class="aurora aurora-b"></div><div class="aurora aurora-c"></div><div class="hero-grid"></div></div>
+      <div class="page-hero-inner">
+        <p class="section-eyebrow reveal" data-i18n="sr.eyebrow">科研产出场景</p>
+        <h1 class="reveal" data-i18n-html="sr.title">一篇论文 PDF，<em>转成研究汇报 PPT</em></h1>
+        <p class="page-lead reveal" data-i18n="sr.lead">导入一份 PDF。智能体解析全文，用 CL-OCR 取正文、表格与公式，按版面裁出论文原图，再排成研究汇报 PPT，并附上数据分析。</p>
+        <div class="scene-switcher reveal">
+          <a class="active" href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
+          <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
+          <a href="scene-channels.html"><span data-i18n="sc.channels.t">消息渠道</span></a>
+                  <a href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 背景 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <p class="section-eyebrow" data-i18n="srx.bg.eyebrow">背景</p>
+        <h2 class="section-title" data-i18n="srx.bg.title">常见的三类问题</h2>
+        <p class="section-sub" data-i18n="srx.bg.sub">用通用对话式 AI 制作研究汇报时，常见以下三类问题。</p>
+      </div>
+      <div class="demo-note reveal" style="margin-top:40px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span><b data-i18n="srx.bg.t1">图表来源不可靠</b>：<span data-i18n="srx.bg.d1">要求通用聊天机器人提供「论文里的图」时，它往往生成一张近似的示意图：坐标轴、曲线与数字都不来自论文本身，无法用于正式汇报。</span> · <b data-i18n="srx.bg.t2">版式不符合学术汇报惯例</b>：<span data-i18n="srx.bg.d2">生成的版式常带有明显的模板特征，与学术汇报的惯例不符，需要重新排版。</span> · <b data-i18n="srx.bg.t3">结论缺少可核对的出处</b>：<span data-i18n="srx.bg.d3">数字与引用没有注明来自哪一页、哪张表或哪一次计算，使用前需要逐项重新核实。</span></span>
+      </div>
+    </section>
+
+    <!-- ============ 三步（含真实工具链） ============ -->
+    <section class="section">
+      <div class="ladder reveal">
+        <div class="ladder-step">
+          <h3 data-i18n="sr.s1t">导入论文</h3>
+          <p data-i18n="srx.s1d">导入 PDF 后，智能体读取全文，解析章节结构、图表位置与引用上下文，写出大纲并确定需要渲染的页码。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="sr.s2t">提取并校验</h3>
+          <p data-i18n="srx.s2d">渲染选定页面，交给专用 CL-OCR：提取正文、表格(HTML)与公式(LaTeX)，按版面坐标裁取论文原图。其中的数据再在项目工作区内用 Python 复核。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="sr.s3t">生成成果</h3>
+          <p data-i18n="srx.s3d">生成汇报 PPT 与分析报告，每条结论注明所依据的页码、图号或数据文件，可逐项核对；版式遵循学术汇报惯例。</p>
+        </div>
+      </div>
+      <div class="demo-note reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span data-i18n-html="srx.note.limit"><b>说明：</b>复杂公式与特殊版式的识别结果可能需要人工核对；生成的是供修改的汇报初稿。</span>
+      </div>
+    </section>
+
+    <!-- ============ 现场演示 · 论文 → PPT ============ -->
+    <section class="section">
+      <div class="scene-stage reveal">
+        <div class="cv-stage-wrap">
+          <div class="cv-frame" data-player="paperppt">
+            <div class="cv-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><span class="cv-title"></span></div>
+            <div class="cv-stage"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 现场演示 · 数据分析 ============ -->
+    <section class="section">
+      <div class="scene-stage reveal">
+        <div class="cv-stage-wrap">
+          <div class="cv-frame" data-player="dataanalysis">
+            <div class="cv-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><span class="cv-title"></span></div>
+            <div class="cv-stage"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene-result reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4 4 10-10.5"/></svg></span>
+        <p data-i18n-html="sr.result"><b>一份 15 页 PPT 与一份分析报告：</b>每张图取自论文原文，每项指标注明出处，可逐项核对。</p>
+      </div>
+    </section>
+
+    <!-- ============ 做法 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <p class="section-eyebrow" data-i18n="srx.diff.eyebrow">场景设计</p>
+        <h2 class="section-title" data-i18n="srx.diff.title">具体做法</h2>
+        <p class="section-sub" data-i18n="srx.diff.sub">图表按版面坐标从原文裁切；结果先核对再标记完成；过程完整留存。</p>
+      </div>
+      <div class="feature-grid" style="margin-top:48px">
+        <article class="feature-card reveal">
+          <div class="feature-ico i-blue"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="14" rx="2.2" stroke="currentColor" stroke-width="1.8"/><path d="m6.5 16 3.5-4 2.5 2.8L16 10l1.5 1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="1.3" fill="currentColor"/></svg></div>
+          <h3 data-i18n="srx.diff.t1">图表取自原文</h3>
+          <p data-i18n="srx.diff.d1">每张图都由 CL-OCR 按版面坐标，从论文渲染出的页面中裁取，成稿中的图即论文原图。</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-ico i-red"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5 5 6.5v5c0 4.2 3 7.6 7 9 4-1.4 7-4.8 7-9v-5l-7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9.2 11.8 2 2 3.6-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 data-i18n="srx.diff.t2">结果先核对再标记完成</h3>
+          <p data-i18n="srx.diff.d2">每个步骤的结果先与生成的文件、数据和渲染产物逐项核对，通过后才标记完成并进入下一步。</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-ico i-violet"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 data-i18n="srx.diff.t3">过程完整留存</h3>
+          <p data-i18n="srx.diff.d3">会话全程留存，可以回看；每份成果如何得到，随时可以复查。</p>
+        </article>
+      </div>
+      <div class="demo-note reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <span data-i18n-html="srx.note.diff"><b>归结起来：</b>图表与表格取自论文原文；每一步的结果先核对再标记完成；会话全程留存，成果来源随时可以复查。</span>
+      </div>
+    </section>
+
+    <!-- ============ 克制的下一步（取代重复的大卡片） ============ -->
+    <div class="next-row reveal">
+      <span class="nr-label" data-i18n="next.label">进一步了解：</span>
+      <a class="btn btn-ghost btn-sm" href="scene-office.html" data-i18n="sc.office.t">自动化办公</a>
+      <a class="btn btn-ghost btn-sm" href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a>
+      <a class="btn btn-ghost btn-sm" href="download.html" data-i18n="nav.download">下载</a>
+    </div>
+
+  </main>
+
+  <!-- ============ 共享页脚 ============ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/cair-logo.png" alt="CAIR" class="footer-logo" />
+        <p class="footer-org">中国科学院香港创新研究院人工智能与机器人创新中心</p>
+        <p class="footer-org-en" lang="en">Centre for Artificial Intelligence and Robotics,<br />Hong Kong Institute of Science &amp; Innovation, Chinese Academy of Sciences</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col"><h4 data-i18n="ft.product">产品</h4><a href="features.html" data-i18n="nav.features">核心特点</a><a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a><a href="architecture.html" data-i18n="nav.arch">系统原理</a><a href="download.html" data-i18n="nav.download">下载</a></div>
+        <div class="footer-col"><h4 data-i18n="ft.org">机构</h4><a href="https://www.cair-cas.org.hk/" target="_blank" rel="noopener" data-i18n="ft.cair">CAIR 官网</a><a href="mailto:enquiry@cair-cas.org.hk">enquiry@cair-cas.org.hk</a><p class="footer-cap" data-i18n="ft.dev">联系开发者</p><a href="mailto:wenzhuoliu2020@gmail.com">wenzhuoliu2020@gmail.com</a></div>
+        <div class="footer-col footer-addr"><h4 data-i18n="ft.contact">联系地址</h4><p data-i18n="ft.addr">香港新界白石角香港科学园科技大道西 17W 大楼 3 楼</p></div>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <p><span data-i18n="ft.copy">© 2026 中国科学院香港创新研究院人工智能与机器人创新中心</span> <span data-i18n="ft.rights">保留所有权利。</span></p>
+      <p class="footer-tag" lang="en">We Advance AI and Robotics for a Healthier Future</p>
+    </div>
+  </footer>
+
+  <script src="demo.js"></script>
+</body>
+</html>

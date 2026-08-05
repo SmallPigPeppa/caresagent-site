@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <script>document.documentElement.className += ' js';</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaresAgent — 场景 · 文档解析</title>
+  <meta name="description" content="文档解析场景：用专用文档模型 CL-OCR 把图片、扫描件、渲染后的 PDF 页转成结构化 Markdown：正文按阅读顺序、表格转 HTML、公式转 LaTeX，图表按版面裁成独立图片，并提供原文与解析结果的逐块对照阅读器。" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="demo.css" />
+  <script src="dict.js"></script>
+  <script>
+    window.DEMO_EN_META = {
+      title: 'CaresAgent — Scenario · Document parsing',
+      description: 'Document parsing scenario: a dedicated CL-OCR model turns images, scans and rendered PDF pages into structured Markdown — text in reading order, tables as HTML, formulas as LaTeX, and figures cropped by layout, with an original ↔ parsed reader to check it block by block.'
+    };
+  </script>
+  <script>Object.assign(window.DEMO_EN, {
+    'ocr.eyebrow': 'Scenario · Document parsing',
+    'ocr.title': 'Scans, papers, screenshots — <em>into structured Markdown</em>',
+    'ocr.lead': 'CaresAgent reads document layout with a dedicated model (CL-OCR): text in reading order, tables as HTML, formulas as LaTeX, and figures / tables cropped into separate images. Recognition is performed by this dedicated model, not by a general multimodal model.',
+    'ocx.why.eyebrow': 'Method',
+    'ocx.why.title': 'Document recognition is a dedicated task',
+    'ocx.why.sub': 'A general multimodal model can describe what a figure means. Transcribing a document character by character and rebuilding its tables and formulas is a different task.',
+    'ocx.why.note': '<b>CL-OCR is a dedicated document model</b>, working in two stages: analyse the page layout, then recognise each block, emitting tables as HTML and formulas as LaTeX in Markdown. Visual reasoning (what a chart means, describing an image) is handled by a different tool, never text extraction or crop coordinates.',
+    'ocx.s1t': 'Receive an image / render',
+    'ocx.s1d': 'CL-OCR accepts images only (jpeg / png / webp). PDF pages are first rendered to PNG, then recognised page by page.',
+    'ocx.s2t': 'Recognise layout & content',
+    'ocx.s2d': 'Markdown is produced in reading order: text, tables (HTML) and formulas (LaTeX); figures, tables and charts are cropped into separate images by detected layout box, with coordinates from layout analysis.',
+    'ocx.s3t': 'Check block by block',
+    'ocx.s3d': 'The desktop CL-OCR reader puts the original’s layout boxes beside the parsed result, with two-way click navigation between them; each block is checked before it goes into Word / PPT or further analysis.',
+    'ocx.read.eyebrow': 'Original ↔ parsed',
+    'ocx.read.title': 'The source compared with the parsed result',
+    'ocx.read.sub': 'Left: the layout blocks CL-OCR detected. Right: the matching Markdown — the colours correspond one to one.',
+    'ocx.pane.src': 'Original',
+    'ocx.pane.out': 'Parsed',
+    'ocx.tag.text': 'Text', 'ocx.tag.formula': 'Formula', 'ocx.tag.table': 'Table', 'ocx.tag.fig': 'Figure',
+    'ocx.doc.h': '3. One-dimensional heat equation',
+    'ocx.doc.p': 'For a uniform rod of length L, the temperature u(x,t) satisfies the diffusion equation under Dirichlet boundary conditions.',
+    'ocx.tb.param': 'Parameter', 'ocx.tb.value': 'Value',
+    'ocx.note.limit': '<b>Note:</b> CL-OCR takes image input and runs in roughly a dozen seconds per page. Recognition results for very complex layouts or handwriting may need manual checking. Markdown does not embed image data; figures are saved as separate files.',
+    'ocx.result': '<b>One structured Markdown file</b> — text, tables (HTML), formulas (LaTeX) and the cropped figures each in place, ready for Word / PPT or further analysis.'
+  });</script>
+</head>
+<body>
+
+
+  <!-- ============ 共享导航（每页一致） ============ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="CaresAgent">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="bm-g" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2450b4"/><stop offset=".48" stop-color="#7a4aa8"/><stop offset="1" stop-color="#d24040"/></linearGradient><clipPath id="bm-c"><rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)"/></clipPath></defs>
+            <rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)" fill="url(#bm-g)"/>
+            <g clip-path="url(#bm-c)"><g transform="rotate(-45 24 24)" fill="#ffffff">
+              <path d="M12.8 15.8 Q12.8 12.8 15.8 12.8 H27.93 V18.325 H19.3 V22.175 H27.93 V27.025 H12.8 Z"/>
+              <path d="M12.8 30.875 H27.93 V35.2 H15.8 Q12.8 35.2 12.8 32.2 Z"/>
+              <path d="M29.83 12.8 H32.2 Q35.2 12.8 35.2 15.8 V18.325 H29.83 Z"/>
+              <path d="M29.83 22.175 H35.2 V32.2 Q35.2 35.2 32.2 35.2 H29.83 Z"/>
+            </g></g>
+          </svg>
+        </span>
+        <span class="brand-word">CaresAgent</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="features.html" data-i18n="nav.features">核心特点</a>
+        <div class="nav-dd">
+          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-dd-menu">
+            <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
+            <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
+            <a href="scene-channels.html"><span data-i18n="sc.channels.t">消息渠道</span></a>
+            <a href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+          </div>
+        </div>
+        <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+        <a href="download.html" data-i18n="nav.download">下载</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to English">
+          <span class="lang-zh" lang="zh-CN">中</span><span class="lang-divider">/</span><span class="lang-en" lang="en">EN</span>
+        </button>
+        <a class="btn btn-primary btn-sm" href="download.html" data-i18n="nav.cta">下载</a>
+        <details class="nav-menu" id="navMenu">
+          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></summary>
+          <div class="nav-menu-panel">
+            <a href="features.html" data-i18n="nav.features">核心特点</a>
+            <a href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+            <a href="scene-office.html" data-i18n="sc.office.t">自动化办公</a>
+            <a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a>
+            <a href="scene-ocr.html" data-i18n="sc.ocr.t">文档解析</a>
+            <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+            <a href="download.html" data-i18n="nav.download">下载</a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="page-hero">
+      <div class="hero-bg" aria-hidden="true"><div class="aurora aurora-a"></div><div class="aurora aurora-b"></div><div class="aurora aurora-c"></div><div class="hero-grid"></div></div>
+      <div class="page-hero-inner">
+        <p class="section-eyebrow reveal" data-i18n="ocr.eyebrow">场景 · 文档解析</p>
+        <h1 class="reveal" data-i18n-html="ocr.title">扫描件、论文、截图，<em>转成结构化 Markdown</em></h1>
+        <p class="page-lead reveal" data-i18n="ocr.lead">CaresAgent 使用专用文档模型（CL-OCR）识别版面：正文按阅读顺序、表格转 HTML、公式转 LaTeX，图与表按版面裁成独立图片。识别由专用模型完成，而非通用多模态模型。</p>
+        <div class="scene-switcher reveal">
+          <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
+          <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
+          <a href="scene-channels.html"><span data-i18n="sc.channels.t">消息渠道</span></a>
+          <a class="active" href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 为什么用专用模型 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <p class="section-eyebrow" data-i18n="ocx.why.eyebrow">方法</p>
+        <h2 class="section-title" data-i18n="ocx.why.title">文档识别是一项专门任务</h2>
+        <p class="section-sub" data-i18n="ocx.why.sub">通用多模态能描述一张图的含义；逐字转写文档、还原表格与公式，是另一类任务。</p>
+      </div>
+      <div class="demo-note reveal" style="margin-top:40px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span data-i18n-html="ocx.why.note"><b>CL-OCR 是专用文档模型</b>，分两个阶段：先分析版面，再逐块识别，把表格整理成 HTML、公式整理成 LaTeX，输出 Markdown。视觉理解（图表含义、描述图片）由另一类工具承担，不用于文字提取或裁切坐标。</span>
+      </div>
+    </section>
+
+    <!-- ============ 三个步骤 ============ -->
+    <section class="section">
+      <div class="ladder reveal">
+        <div class="ladder-step">
+          <h3 data-i18n="ocx.s1t">接收图片 / 渲染</h3>
+          <p data-i18n-html="ocx.s1d">CL-OCR 只接收图片（jpeg / png / webp）。PDF 先逐页渲染成 PNG，再交给它识别。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="ocx.s2t">识别版面与内容</h3>
+          <p data-i18n-html="ocx.s2d">按阅读顺序输出 Markdown：正文、表格(HTML)、公式(LaTeX)；图、表与图表按版面检测框裁成独立图片，坐标来自版面分析。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="ocx.s3t">逐块核对</h3>
+          <p data-i18n-html="ocx.s3d">桌面端的 CL-OCR 阅读器把原图版面框与解析结果并排显示，点击可在两侧双向定位；逐块核对后再用于 Word / PPT 或后续分析。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 原文 ↔ 解析 阅读器 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <p class="section-eyebrow" data-i18n="ocx.read.eyebrow">原文 ↔ 解析</p>
+        <h2 class="section-title" data-i18n="ocx.read.title">原文与解析结果对照</h2>
+        <p class="section-sub" data-i18n="ocx.read.sub">左边是 CL-OCR 检测出的版面块，右边是对应的 Markdown，颜色一一对应。</p>
+      </div>
+
+      <div class="cv-stage-wrap reveal">
+        <div class="ocr-reader">
+          <div class="ocr-pane">
+            <div class="ocr-pane-bar">
+              <svg class="obar-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="m4 17 5-4 5 4 3-2.5 3 2.5"/></svg>
+              <span data-i18n="ocx.pane.src">原图</span>
+              <span class="obar-file">notes_p3.jpg</span>
+            </div>
+            <div class="ocr-src">
+              <div class="ocr-page">
+                <div class="ocr-box b-text">
+                  <span class="ocr-tag" data-i18n="ocx.tag.text">正文</span>
+                  <p class="pg-h" data-i18n="ocx.doc.h">3. 一维热传导方程</p>
+                  <div class="pg-line w95"></div><div class="pg-line w85"></div><div class="pg-line w70"></div>
+                </div>
+                <div class="ocr-box b-formula">
+                  <span class="ocr-tag" data-i18n="ocx.tag.formula">公式</span>
+                  <p class="pg-formula">∂u/∂t = α · ∂²u/∂x²</p>
+                </div>
+                <div class="ocr-box b-table">
+                  <span class="ocr-tag" data-i18n="ocx.tag.table">表格</span>
+                  <div class="pg-table"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                </div>
+                <div class="ocr-box b-fig">
+                  <span class="ocr-tag" data-i18n="ocx.tag.fig">插图</span>
+                  <div class="pg-fig"></div>
+                </div>
+                <span class="ocr-scan" aria-hidden="true"></span>
+              </div>
+            </div>
+          </div>
+          <div class="ocr-pane">
+            <div class="ocr-pane-bar">
+              <svg class="obar-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 8-4 4 4 4M15 8l4 4-4 4"/></svg>
+              <span data-i18n="ocx.pane.out">解析</span>
+              <span class="obar-file">Markdown</span>
+            </div>
+            <div class="ocr-out">
+              <div class="ocr-blk b-text">
+                <span class="blk-tag"><span data-i18n="ocx.tag.text">正文</span></span>
+                <p class="md-h" data-i18n="ocx.doc.h">3. 一维热传导方程</p>
+                <p class="md-text" data-i18n="ocx.doc.p">长度为 L 的均匀细杆，温度 u(x,t) 满足扩散方程，边界条件取 Dirichlet 型。</p>
+              </div>
+              <div class="ocr-blk b-formula">
+                <span class="blk-tag"><span data-i18n="ocx.tag.formula">公式</span> · LaTeX</span>
+                <p class="md-formula">∂u/∂t = α ∂²u/∂x²</p>
+              </div>
+              <div class="ocr-blk b-table">
+                <span class="blk-tag"><span data-i18n="ocx.tag.table">表格</span> · HTML</span>
+                <table class="md-table">
+                  <thead><tr><th data-i18n="ocx.tb.param">参数</th><th data-i18n="ocx.tb.value">取值</th></tr></thead>
+                  <tbody><tr><td>α</td><td>0.89 cm²/s</td></tr><tr><td>L</td><td>10 cm</td></tr></tbody>
+                </table>
+              </div>
+              <div class="ocr-blk b-fig">
+                <span class="blk-tag"><span data-i18n="ocx.tag.fig">插图</span> · PNG</span>
+                <div class="md-fig">figure_1.png · 327×214</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ocr-legend reveal">
+          <span class="lg-text" data-i18n="ocx.tag.text">正文</span>
+          <span class="lg-formula" data-i18n="ocx.tag.formula">公式</span>
+          <span class="lg-table" data-i18n="ocx.tag.table">表格</span>
+          <span class="lg-fig" data-i18n="ocx.tag.fig">插图</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 现场演示 · 文档 → Markdown ============ -->
+    <section class="section">
+      <div class="scene-stage reveal">
+        <div class="cv-stage-wrap">
+          <div class="cv-frame" data-player="ocr">
+            <div class="cv-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><span class="cv-title"></span></div>
+            <div class="cv-stage"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-note reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span data-i18n-html="ocx.note.limit"><b>说明：</b>CL-OCR 接收图片输入，单页约十几秒。极复杂版式或手写内容的识别结果可能需要人工核对。Markdown 不内嵌图片数据，插图另存为独立文件。</span>
+      </div>
+
+      <div class="scene-result reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4 4 10-10.5"/></svg></span>
+        <p data-i18n-html="ocx.result"><b>一份结构化 Markdown</b>：正文、表格(HTML)、公式(LaTeX)与裁出的插图各在对应位置，可直接用于 Word / PPT 或后续分析。</p>
+      </div>
+    </section>
+
+    <!-- ============ 克制的下一步 ============ -->
+    <div class="next-row reveal">
+      <span class="nr-label" data-i18n="next.label">进一步了解：</span>
+      <a class="btn btn-ghost btn-sm" href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+      <a class="btn btn-ghost btn-sm" href="architecture.html" data-i18n="nav.arch">系统原理</a>
+      <a class="btn btn-ghost btn-sm" href="download.html" data-i18n="nav.download">下载</a>
+    </div>
+
+  </main>
+
+  <!-- ============ 共享页脚 ============ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/cair-logo.png" alt="CAIR" class="footer-logo" />
+        <p class="footer-org">中国科学院香港创新研究院人工智能与机器人创新中心</p>
+        <p class="footer-org-en" lang="en">Centre for Artificial Intelligence and Robotics,<br />Hong Kong Institute of Science &amp; Innovation, Chinese Academy of Sciences</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col"><h4 data-i18n="ft.product">产品</h4><a href="features.html" data-i18n="nav.features">核心特点</a><a href="scene-ocr.html" data-i18n="sc.ocr.t">文档解析</a><a href="architecture.html" data-i18n="nav.arch">系统原理</a><a href="download.html" data-i18n="nav.download">下载</a></div>
+        <div class="footer-col"><h4 data-i18n="ft.org">机构</h4><a href="https://www.cair-cas.org.hk/" target="_blank" rel="noopener" data-i18n="ft.cair">CAIR 官网</a><a href="mailto:enquiry@cair-cas.org.hk">enquiry@cair-cas.org.hk</a><p class="footer-cap" data-i18n="ft.dev">联系开发者</p><a href="mailto:wenzhuoliu2020@gmail.com">wenzhuoliu2020@gmail.com</a></div>
+        <div class="footer-col footer-addr"><h4 data-i18n="ft.contact">联系地址</h4><p data-i18n="ft.addr">香港新界白石角香港科学园科技大道西 17W 大楼 3 楼</p></div>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <p><span data-i18n="ft.copy">© 2026 中国科学院香港创新研究院人工智能与机器人创新中心</span> <span data-i18n="ft.rights">保留所有权利。</span></p>
+      <p class="footer-tag" lang="en">We Advance AI and Robotics for a Healthier Future</p>
+    </div>
+  </footer>
+
+  <script src="demo.js"></script>
+</body>
+</html>

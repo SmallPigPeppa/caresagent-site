@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <script>document.documentElement.className += ' js';</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaresAgent — 场景 · 自动化办公</title>
+  <meta name="description" content="自动化办公场景：智能体走查网页流程并逐步截图记录；生成公众号文章并存入草稿箱，再行发布。" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="demo.css" />
+  <script src="dict.js"></script>
+  <script>
+    window.DEMO_EN_META = {
+      title: 'CaresAgent — Scenario · Office automation',
+      description: 'Office automation scenario: the agent walks through a web flow with step-by-step screenshot records, and produces a WeChat Official-Account article staged in the draft box before publishing.'
+    };
+  </script>
+  <script>Object.assign(window.DEMO_EN, {
+    'sox.pain.eyebrow': 'Background',
+    'sox.pain.title': 'Characteristics of <em>this work</em>',
+    'sox.pain.sub': 'This kind of work has three characteristics.',
+    'sox.pain.t1': 'Walk-throughs are repetitive',
+    'sox.pain.d1': 'Before each release, the same sign-up, form and survey flows have to be walked through again.',
+    'sox.pain.t2': 'Results need screenshot records',
+    'sox.pain.d2': 'A verbal confirmation does not constitute a report; each step needs a screenshot record that can be checked.',
+    'sox.pain.t3': 'Public content is reviewed before release',
+    'sox.pain.d3': 'Public posts and Official-Account articles are not sent out automatically; they are published only after human review.',
+    'sox.s1t': 'A titled plan comes first',
+    'sox.s1d': 'For a web walk-through, the agent first writes a titled plan; the browser opens in the shared panel, and sensitive actions ask for your confirmation.',
+    'sox.s2t': 'Walk the real flow, screenshot each step',
+    'sox.s2d': 'The agent drives the actual pages step by step and captures a screenshot at every step; for the Official Account it uses the <b>wechat_draft_box</b> skill to pull and lay out the article.',
+    'sox.s3t': 'Stage in the draft box',
+    'sox.s3d': 'The article is staged in your draft box; you decide when to publish.',
+    'sox.bound': '<b>Note.</b> Articles are only staged in the draft box. Browser automation depends on the target site being reachable and the login being valid: on a CAPTCHA or an expired login, the step stops and reports failure rather than being marked successful.'
+  });</script>
+</head>
+<body>
+
+
+  <!-- ============ 共享导航（每页一致） ============ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="CaresAgent">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="bm-g" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2450b4"/><stop offset=".48" stop-color="#7a4aa8"/><stop offset="1" stop-color="#d24040"/></linearGradient><clipPath id="bm-c"><rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)"/></clipPath></defs>
+            <rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)" fill="url(#bm-g)"/>
+            <g clip-path="url(#bm-c)"><g transform="rotate(-45 24 24)" fill="#ffffff">
+              <path d="M12.8 15.8 Q12.8 12.8 15.8 12.8 H27.93 V18.325 H19.3 V22.175 H27.93 V27.025 H12.8 Z"/>
+              <path d="M12.8 30.875 H27.93 V35.2 H15.8 Q12.8 35.2 12.8 32.2 Z"/>
+              <path d="M29.83 12.8 H32.2 Q35.2 12.8 35.2 15.8 V18.325 H29.83 Z"/>
+              <path d="M29.83 22.175 H35.2 V32.2 Q35.2 35.2 32.2 35.2 H29.83 Z"/>
+            </g></g>
+          </svg>
+        </span>
+        <span class="brand-word">CaresAgent</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="features.html" data-i18n="nav.features">核心特点</a>
+        <div class="nav-dd">
+          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-dd-menu">
+            <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
+            <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
+            <a href="scene-channels.html"><span data-i18n="sc.channels.t">消息渠道</span></a>
+            <a href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+          </div>
+        </div>
+        <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+        <a href="download.html" data-i18n="nav.download">下载</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to English">
+          <span class="lang-zh" lang="zh-CN">中</span><span class="lang-divider">/</span><span class="lang-en" lang="en">EN</span>
+        </button>
+        <a class="btn btn-primary btn-sm" href="download.html" data-i18n="nav.cta">下载</a>
+        <details class="nav-menu" id="navMenu">
+          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></summary>
+          <div class="nav-menu-panel">
+            <a href="features.html" data-i18n="nav.features">核心特点</a>
+            <a href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+            <a href="scene-office.html" data-i18n="sc.office.t">自动化办公</a>
+            <a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a>
+            <a href="scene-ocr.html" data-i18n="sc.ocr.t">文档解析</a>
+            <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+            <a href="download.html" data-i18n="nav.download">下载</a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="page-hero">
+      <div class="hero-bg" aria-hidden="true"><div class="aurora aurora-a"></div><div class="aurora aurora-b"></div><div class="aurora aurora-c"></div><div class="hero-grid"></div></div>
+      <div class="page-hero-inner">
+        <p class="section-eyebrow reveal" data-i18n="so.eyebrow">场景 · 自动化办公</p>
+        <h1 class="reveal" data-i18n-html="so.title">浏览器流程测试与<em>公众号草稿</em></h1>
+        <p class="page-lead reveal" data-i18n="so.lead">走查网页流程并逐步截图记录；起草公众号推送并存入草稿箱。</p>
+        <div class="scene-switcher reveal">
+          <a href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+          <a href="scene-office.html" class="active" data-i18n="sc.office.t">自动化办公</a>
+          <a href="scene-channels.html"><span data-i18n="sc.channels.t">消息渠道</span></a>
+                  <a href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 背景 ============ -->
+    <section class="section">
+      <div class="section-head reveal">
+        <p class="section-eyebrow" data-i18n="sox.pain.eyebrow">背景</p>
+        <h2 class="section-title" data-i18n-html="sox.pain.title">这类工作的<em>特征</em></h2>
+        <p class="section-sub" data-i18n="sox.pain.sub">这类工作有三个特征。</p>
+      </div>
+      <div class="demo-note reveal" style="margin-top:40px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></svg>
+        <span><b data-i18n="sox.pain.t1">走查具有重复性</b><span data-i18n="sox.pain.d1">发布前需要把同样的注册、表单与问卷流程重新走查一遍。</span> <b data-i18n="sox.pain.t2">结果需要截图记录</b><span data-i18n="sox.pain.d2">口头确认不构成报告；每一步需要可核对的截图记录。</span> <b data-i18n="sox.pain.t3">对外内容先经人工审阅</b><span data-i18n="sox.pain.d3">对外的帖子或公众号文章不会自动发出，须经人工审阅后再发布。</span></span>
+      </div>
+    </section>
+
+    <!-- ============ 步骤（深化具体机制） ============ -->
+    <section class="section">
+      <div class="ladder reveal">
+        <div class="ladder-step">
+          <h3 data-i18n="sox.s1t">先写出带标题的计划</h3>
+          <p data-i18n-html="sox.s1d">需要走查网页流程时，智能体先写出带标题的计划；浏览器在共享面板中打开，敏感操作先经你确认。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="sox.s2t">走查真实流程，逐步截图</h3>
+          <p data-i18n-html="sox.s2d">智能体逐步驱动真实页面，并在每一步截图留存；做公众号时则用 <b>wechat_draft_box</b> 技能拉取并排版文章。</p>
+        </div>
+        <div class="ladder-step">
+          <h3 data-i18n="sox.s3t">存入草稿箱</h3>
+          <p data-i18n-html="sox.s3d">文章存入你的草稿箱，由你决定何时发布。</p>
+        </div>
+      </div>
+
+      <div class="scene-stage reveal">
+        <div class="cv-stage-wrap">
+          <div class="cv-frame" data-player="browserqa">
+            <div class="cv-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><span class="cv-title"></span></div>
+            <div class="cv-stage"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene-stage reveal">
+        <div class="cv-stage-wrap">
+          <div class="cv-frame" data-player="mpdraft">
+            <div class="cv-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><span class="cv-title"></span></div>
+            <div class="cv-stage"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene-result reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <p data-i18n-html="so.result"><b>逐步的截图记录</b>，以及草稿箱里<b>一篇就绪的公众号草稿</b>。</p>
+      </div>
+
+      <!-- ============ 说明 ============ -->
+      <div class="demo-note reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></svg>
+        <span data-i18n-html="sox.bound"><b>说明。</b>文章仅存入草稿箱。浏览器自动化依赖目标站点可达与登录状态有效：遇到验证码或登录过期，该步骤会中止并如实报告失败，不会被标记为成功。</span>
+      </div>
+    </section>
+
+    <!-- ============ 克制的下一步（取代重复的大卡片） ============ -->
+    <div class="next-row reveal">
+      <span class="nr-label" data-i18n="next.label">进一步了解：</span>
+      <a class="btn btn-ghost btn-sm" href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+      <a class="btn btn-ghost btn-sm" href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a>
+      <a class="btn btn-ghost btn-sm" href="download.html" data-i18n="nav.download">下载</a>
+    </div>
+  </main>
+
+  <!-- ============ 共享页脚 ============ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/cair-logo.png" alt="CAIR" class="footer-logo" />
+        <p class="footer-org">中国科学院香港创新研究院人工智能与机器人创新中心</p>
+        <p class="footer-org-en" lang="en">Centre for Artificial Intelligence and Robotics,<br />Hong Kong Institute of Science &amp; Innovation, Chinese Academy of Sciences</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col"><h4 data-i18n="ft.product">产品</h4><a href="features.html" data-i18n="nav.features">核心特点</a><a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a><a href="architecture.html" data-i18n="nav.arch">系统原理</a><a href="download.html" data-i18n="nav.download">下载</a></div>
+        <div class="footer-col"><h4 data-i18n="ft.org">机构</h4><a href="https://www.cair-cas.org.hk/" target="_blank" rel="noopener" data-i18n="ft.cair">CAIR 官网</a><a href="mailto:enquiry@cair-cas.org.hk">enquiry@cair-cas.org.hk</a><p class="footer-cap" data-i18n="ft.dev">联系开发者</p><a href="mailto:wenzhuoliu2020@gmail.com">wenzhuoliu2020@gmail.com</a></div>
+        <div class="footer-col footer-addr"><h4 data-i18n="ft.contact">联系地址</h4><p data-i18n="ft.addr">香港新界白石角香港科学园科技大道西 17W 大楼 3 楼</p></div>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <p><span data-i18n="ft.copy">© 2026 中国科学院香港创新研究院人工智能与机器人创新中心</span> <span data-i18n="ft.rights">保留所有权利。</span></p>
+      <p class="footer-tag" lang="en">We Advance AI and Robotics for a Healthier Future</p>
+    </div>
+  </footer>
+
+  <script src="demo.js"></script>
+</body>
+</html>

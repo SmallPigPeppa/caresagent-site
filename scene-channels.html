@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <script>document.documentElement.className += ' js';</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaresAgent — 场景 · 消息渠道</title>
+  <meta name="description" content="将 CaresAgent 接入微信、飞书或企业微信：消息流入即成会话，产物沿同一渠道回传。本页说明各渠道的接入方式、收发身份与能力范围。" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="demo.css" />
+  <script src="dict.js"></script>
+  <script>
+    window.DEMO_EN_META = {
+      title: 'CaresAgent — Scenario · Channels',
+      description: 'Connect CaresAgent to WeChat, Feishu or WeCom: incoming messages become sessions, and artifacts return over the same channel. This page describes how each channel connects, its send/receive identity, and its capabilities.'
+    };
+  </script>
+  <script>Object.assign(window.DEMO_EN, {
+    'scx.df.eyebrow': 'Mechanism',
+    'scx.df.h': 'File return and outbound messages',
+    'scx.df.t1': 'Files return over the original channel',
+    'scx.df.d1': 'Files produced by the agent are sent back over the same channel the message arrived on — no re-upload, no external link. On desktop, the same artifact is saved into the project folder.',
+    'scx.df.t2': 'Outbound messages are staged as drafts first',
+    'scx.df.d2': 'Messages to customers and customer groups are first staged as drafts in your WeCom group-send assistant and sent from within WeCom; messages to colleagues and internal groups can be sent directly (text only, visible scope of at most 10 people).',
+    'scx.df.demo.meta': 'Back over WeChat · 2.4 MB',
+    'scx.df.demo.sent': 'Delivered',
+    'scx.df.demo.ob': 'Staged in group-send assistant',
+    'scx.df.demo.tg': 'Customer group · 12',
+    'scx.df.demo.obnote': 'Staged; sent from within WeCom.',
+  });</script>
+  <!-- 页面局部样式：渠道身份卡的定义列表（不触碰共享 demo.css） -->
+  <style>
+    .ch-dl { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+    .ch-dl > div { display: grid; grid-template-columns: 76px 1fr; gap: 12px; align-items: baseline; }
+    .ch-dl dt { font-size: 12px; font-weight: 650; color: var(--ink-3); letter-spacing: 0.01em; white-space: nowrap; }
+    .ch-dl dt.edge { color: var(--warn); }
+    .ch-dl dd { margin: 0; font-size: 13px; line-height: 1.65; color: var(--ink-2); }
+    .ch-dl dt.edge + dd { color: var(--ink-1); }
+    .ch-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .ch-brand img { width: 30px; height: 30px; border-radius: 10px; }
+    .ch-brand h3 { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: -0.01em; }
+    .ch-brand .ch-sub { font-size: 12px; color: var(--ink-3); }
+    @media (max-width: 640px) { .df-demos { grid-template-columns: 1fr !important; } }
+    @media (max-width: 520px) { .ch-dl > div { grid-template-columns: 1fr; gap: 3px; } }
+  </style>
+</head>
+<body>
+
+
+  <!-- ============ 共享导航（每页一致） ============ -->
+  <header class="nav" id="nav">
+    <div class="nav-inner">
+      <a class="nav-brand" href="index.html" aria-label="CaresAgent">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="bm-g" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2450b4"/><stop offset=".48" stop-color="#7a4aa8"/><stop offset="1" stop-color="#d24040"/></linearGradient><clipPath id="bm-c"><rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)"/></clipPath></defs>
+            <rect x="9.2" y="9.2" width="29.6" height="29.6" rx="6.2" transform="rotate(45 24 24)" fill="url(#bm-g)"/>
+            <g clip-path="url(#bm-c)"><g transform="rotate(-45 24 24)" fill="#ffffff">
+              <path d="M12.8 15.8 Q12.8 12.8 15.8 12.8 H27.93 V18.325 H19.3 V22.175 H27.93 V27.025 H12.8 Z"/>
+              <path d="M12.8 30.875 H27.93 V35.2 H15.8 Q12.8 35.2 12.8 32.2 Z"/>
+              <path d="M29.83 12.8 H32.2 Q35.2 12.8 35.2 15.8 V18.325 H29.83 Z"/>
+              <path d="M29.83 22.175 H35.2 V32.2 Q35.2 35.2 32.2 35.2 H29.83 Z"/>
+            </g></g>
+          </svg>
+        </span>
+        <span class="brand-word">CaresAgent</span>
+      </a>
+      <nav class="nav-links" aria-label="主导航">
+        <a href="features.html" data-i18n="nav.features">核心特点</a>
+        <div class="nav-dd">
+          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="nav-dd-menu">
+            <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
+            <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
+            <a href="scene-channels.html"><span data-i18n="sc.channels.t">消息渠道</span></a>
+            <a href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+          </div>
+        </div>
+        <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+        <a href="download.html" data-i18n="nav.download">下载</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch to English">
+          <span class="lang-zh" lang="zh-CN">中</span><span class="lang-divider">/</span><span class="lang-en" lang="en">EN</span>
+        </button>
+        <a class="btn btn-primary btn-sm" href="download.html" data-i18n="nav.cta">下载</a>
+        <details class="nav-menu" id="navMenu">
+          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></summary>
+          <div class="nav-menu-panel">
+            <a href="features.html" data-i18n="nav.features">核心特点</a>
+            <a href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
+            <a href="scene-office.html" data-i18n="sc.office.t">自动化办公</a>
+            <a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a>
+            <a href="scene-ocr.html" data-i18n="sc.ocr.t">文档解析</a>
+            <a href="architecture.html" data-i18n="nav.arch">系统原理</a>
+            <a href="download.html" data-i18n="nav.download">下载</a>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="page-hero">
+      <div class="hero-bg" aria-hidden="true"><div class="aurora aurora-a"></div><div class="aurora aurora-b"></div><div class="aurora aurora-c"></div><div class="hero-grid"></div></div>
+      <div class="page-hero-inner">
+        <p class="section-eyebrow reveal" data-i18n="sc2.eyebrow">场景 · 消息渠道</p>
+        <h1 class="reveal" data-i18n-html="ch.title">在团队<em>已有的聊天工具</em>里使用它</h1>
+        <p class="page-lead reveal" data-i18n="ch.sub">接入微信、飞书或企业微信：消息流入即成会话，产物沿同一渠道回传。</p>
+        <div class="scene-switcher reveal">
+          <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
+          <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
+          <a href="scene-channels.html" class="active"><span data-i18n="sc.channels.t">消息渠道</span></a>
+                  <a href="scene-ocr.html"><span data-i18n="sc.ocr.t">文档解析</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 一次连接 ============ -->
+    <section class="section">
+      <div class="cx-stage reveal" style="margin:44px auto 0"><div class="cx-stage-glow" aria-hidden="true"></div><div data-connect></div></div>
+      <div class="demo-note reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></svg>
+        <span data-i18n-html="ch.connect.d">把微信、飞书或企业微信接入 CaresAgent：微信与飞书扫码连接，企业微信校验 AI 机器人凭据。</span>
+      </div>
+
+      <!-- 渠道 demo 切换：微信 / 飞书 / 企业微信，各一段真实对话 -->
+      <div data-lab class="reveal" style="max-width:760px;margin:42px auto 0">
+        <div class="lab-tabs" role="tablist" aria-label="渠道演示">
+          <button class="lab-tab active" data-tab="wechat" role="tab" aria-selected="true" type="button"><img src="assets/providers/wechat.png" alt="" /><span data-i18n="ch.wc.h">微信</span></button>
+          <button class="lab-tab" data-tab="feishu" role="tab" aria-selected="false" type="button"><img src="assets/providers/feishu.png" alt="" /><span data-i18n="ch.fs.h">飞书</span></button>
+          <button class="lab-tab" data-tab="wecom" role="tab" aria-selected="false" type="button"><img src="assets/providers/wecom.png" alt="" /><span data-i18n="ch.wm.h">企业微信</span></button>
+        </div>
+        <div class="lab-panel" data-lab-panel="wechat" role="tabpanel">
+          <div class="lab-player">
+            <div class="cv-frame" data-player="wechat"><div class="cv-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><span class="cv-title"></span><span class="cx-linkbadge" data-linkbadge></span></div><div class="cv-stage"></div></div>
+          </div>
+        </div>
+        <div class="lab-panel" data-lab-panel="feishu" role="tabpanel" hidden>
+          <div class="lab-player">
+            <div class="cv-frame" data-player="feishu"><div class="cv-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><span class="cv-title"></span><span class="cx-linkbadge" data-linkbadge></span></div><div class="cv-stage"></div></div>
+          </div>
+        </div>
+        <div class="lab-panel" data-lab-panel="wecom" role="tabpanel" hidden>
+          <div class="lab-player">
+            <div class="cv-frame" data-player="wecom"><div class="cv-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><span class="cv-title"></span><span class="cx-linkbadge" data-linkbadge></span></div><div class="cv-stage"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ 能力矩阵 ============ -->
+      <div class="section-head reveal" style="margin-top:64px">
+        <h2 class="section-title" style="font-size:clamp(22px,3vw,30px)" data-i18n="ch.matrix.h">能力说明</h2>
+        <p class="section-sub" data-i18n="ch.matrix.sub">各渠道支持与不支持的操作。</p>
+      </div>
+      <div class="cap-table reveal">
+        <div class="cap-row head">
+          <div class="cap-cell feat" data-i18n="m.col.feat">能力</div>
+          <div class="cap-cell"><img src="assets/providers/wechat.png" alt="" /><span data-i18n="ch.wc.h">微信</span></div>
+          <div class="cap-cell"><img src="assets/providers/feishu.png" alt="" /><span data-i18n="ch.fs.h">飞书</span></div>
+          <div class="cap-cell"><img src="assets/providers/wecom.png" alt="" /><span data-i18n="ch.wm.h">企业微信</span></div>
+        </div>
+        <div class="cap-row">
+          <div class="cap-cell feat" data-i18n="m.r1">接收消息</div>
+          <div class="cap-cell"><span class="ya" data-i18n="m.yes">支持</span></div>
+          <div class="cap-cell"><span class="ya" data-i18n="m.yes">支持</span></div>
+          <div class="cap-cell"><span class="ya" data-i18n="m.yes">支持</span></div>
+        </div>
+        <div class="cap-row">
+          <div class="cap-cell feat" data-i18n="m.r2">对话内回复</div>
+          <div class="cap-cell"><span class="ya" data-i18n="m.yes">支持</span></div>
+          <div class="cap-cell"><span class="ya" data-i18n="m.yes">支持</span></div>
+          <div class="cap-cell"><span class="ya" data-i18n="m.yes">支持</span></div>
+        </div>
+        <div class="cap-row">
+          <div class="cap-cell feat" data-i18n="m.r3">文件回传</div>
+          <div class="cap-cell"><span class="li" data-i18n="m.via">经「发送文件」</span></div>
+          <div class="cap-cell"><span class="li" data-i18n="m.via">经「发送文件」</span></div>
+          <div class="cap-cell"><span class="li" data-i18n="m.via">经「发送文件」</span></div>
+        </div>
+        <div class="cap-row">
+          <div class="cap-cell feat" data-i18n="m.r4">主动外发</div>
+          <div class="cap-cell"><span class="li" data-i18n="m.wc.out">仅桌面端</span></div>
+          <div class="cap-cell"><span class="no" data-i18n="m.fs.out">仅回复</span></div>
+          <div class="cap-cell"><span class="li" data-i18n="m.wm.out">半自动</span></div>
+        </div>
+        <div class="cap-row">
+          <div class="cap-cell feat" data-i18n="m.r5">群聊</div>
+          <div class="cap-cell"><span class="li" data-i18n="m.wc.grp">指定群</span></div>
+          <div class="cap-cell"><span class="li" data-i18n="m.fs.grp">@ 触发</span></div>
+          <div class="cap-cell"><span class="li" data-i18n="m.wm.grp">内部群 + @</span></div>
+        </div>
+        <div class="cap-row">
+          <div class="cap-cell feat" data-i18n="m.r6">收发身份</div>
+          <div class="cap-cell"><span class="no" data-i18n="m.id.bot">机器人</span></div>
+          <div class="cap-cell"><span class="no" data-i18n="m.id.app">应用</span></div>
+          <div class="cap-cell"><span class="no" data-i18n="m.id.aibot">AI 机器人</span></div>
+        </div>
+      </div>
+
+      <!-- ============ 文件回传与消息外发 ============ -->
+      <div class="section-head reveal" style="margin-top:72px">
+        <p class="section-eyebrow" data-i18n="scx.df.eyebrow">机制</p>
+        <h2 class="section-title" style="font-size:clamp(22px,3vw,30px)" data-i18n="scx.df.h">文件回传与消息外发</h2>
+      </div>
+      <div class="demo-note reveal" style="margin-top:40px;flex-direction:column;gap:14px;align-items:stretch">
+        <span><b data-i18n="scx.df.t1">文件沿原渠道回传</b> <span data-i18n="scx.df.d1">智能体生成的文件沿消息进入的同一渠道发回，不重新上传、不经外部链接。在桌面端使用时，同一份产物直接保存在项目文件夹中。</span></span>
+        <span><b data-i18n="scx.df.t2">对外消息先生成草稿</b> <span data-i18n="scx.df.d2">面向客户与客户群的消息先生成草稿，暂存至你的企业微信「群发助手」，在企业微信中发送；面向同事与内部群可直接发送（仅文本，可见范围不超过 10 人）。</span></span>
+      </div>
+      <div class="df-demos reveal" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px">
+        <div class="cv-deliver" style="margin:0">
+          <span class="f-ico ppt">PPT</span>
+          <div class="f-main">
+            <div class="f-name">slides_draft.pptx</div>
+            <div class="f-meta" data-i18n="scx.df.demo.meta">经微信回传 · 2.4 MB</div>
+          </div>
+          <span class="f-sent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="scx.df.demo.sent">已送达</span></span>
+        </div>
+        <div class="cv-outbound pending">
+          <div class="cv-ob-head">
+            <span class="cv-ob-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span>
+            <span class="cv-ob-title" data-i18n="scx.df.demo.ob">已暂存进群发助手</span>
+          </div>
+          <div class="cv-ob-targets"><span class="tg" data-i18n="scx.df.demo.tg">客户群 · 12</span></div>
+          <p class="cv-ob-note" data-i18n="scx.df.demo.obnote">已暂存，在企业微信中发送。</p>
+        </div>
+      </div>
+
+      <div class="scene-result reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>
+        <p data-i18n-html="sc2.result"><b>在微信 / 飞书 / 企业微信中收发任务，文件沿同一渠道回传。</b></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 共享页脚 ============ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/cair-logo.png" alt="CAIR" class="footer-logo" />
+        <p class="footer-org">中国科学院香港创新研究院人工智能与机器人创新中心</p>
+        <p class="footer-org-en" lang="en">Centre for Artificial Intelligence and Robotics,<br />Hong Kong Institute of Science &amp; Innovation, Chinese Academy of Sciences</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col"><h4 data-i18n="ft.product">产品</h4><a href="features.html" data-i18n="nav.features">核心特点</a><a href="scene-channels.html" data-i18n="sc.channels.t">消息渠道</a><a href="architecture.html" data-i18n="nav.arch">系统原理</a><a href="download.html" data-i18n="nav.download">下载</a></div>
+        <div class="footer-col"><h4 data-i18n="ft.org">机构</h4><a href="https://www.cair-cas.org.hk/" target="_blank" rel="noopener" data-i18n="ft.cair">CAIR 官网</a><a href="mailto:enquiry@cair-cas.org.hk">enquiry@cair-cas.org.hk</a><p class="footer-cap" data-i18n="ft.dev">联系开发者</p><a href="mailto:wenzhuoliu2020@gmail.com">wenzhuoliu2020@gmail.com</a></div>
+        <div class="footer-col footer-addr"><h4 data-i18n="ft.contact">联系地址</h4><p data-i18n="ft.addr">香港新界白石角香港科学园科技大道西 17W 大楼 3 楼</p></div>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <p><span data-i18n="ft.copy">© 2026 中国科学院香港创新研究院人工智能与机器人创新中心</span> <span data-i18n="ft.rights">保留所有权利。</span></p>
+      <p class="footer-tag" lang="en">We Advance AI and Robotics for a Healthier Future</p>
+    </div>
+  </footer>
+
+  <script src="demo.js"></script>
+</body>
+</html>
