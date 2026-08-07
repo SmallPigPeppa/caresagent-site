@@ -90,6 +90,18 @@ window.DEMO_EN = {
   'wn.c.b1': 'Background → Methods → Findings → Conclusions', 'wn.c.b2': 'One section per figure',
   'wn.c.free': 'Or type your own answer…', 'wn.c.submit': 'Submit answer',
 
+  /* —— 首页:更新日志（已发布版本） —— */
+  'log.eyebrow': 'Changelog',
+  'log.title': 'Released <em>versions</em>',
+  'log.add': 'New', 'log.imp': 'Better', 'log.first': 'First',
+  'log.d2': 'August 2026',
+  'log.i21': 'Scheduled tasks: sessions start automatically at the times you set, and their results land in the session record as usual.',
+  'log.i22': 'Skill management: skill packages are added, edited and removed as whole packages from the interface, with no file editing.',
+  'log.i23': 'Session timeline rebuilt: settled turns are no longer repainted, so long sessions scroll steadily.',
+  'log.d1': 'June 2026',
+  'log.i11': 'First public release: macOS and Windows desktop builds, with projects and sessions, tool calls, permission prompts and messaging channels.',
+  'log.more': 'All versions and installers →',
+
   /* —— 首页:下一步计划（与汇报稿「后续工作 · 四个方向」同源） —— */
   'road.eyebrow': 'Next steps',
   'road.title': 'Four <em>directions</em>',
@@ -130,7 +142,7 @@ window.DEMO_EN = {
   /* —— 下载页 —— */
   'dl.eyebrow': 'Download',
   'dl.title': 'Download <em>CaresAgent</em>',
-  'dl.sub': 'Current version', 'dl.date': 'Released June 2026', 'dl.detected': 'Recommended for your system',
+  'dl.sub': 'Current version', 'dl.date': 'Released August 2026', 'dl.detected': 'Recommended for your system',
   'dl.macReq': 'macOS 12.0+, Apple silicon', 'dl.macBtn': 'Download DMG (Apple silicon)', 'dl.copy': 'Copy',
   'dl.winReq': 'Windows 10/11, x64', 'dl.winBtn': 'Download NSIS installer',
   'dl.linReq': 'x64, major distributions', 'dl.linBtn': 'Download AppImage',
