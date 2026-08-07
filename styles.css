@@ -449,7 +449,7 @@ body:not([data-lang='en']) .lang-toggle .lang-en { color: var(--ink-2); font-wei
   text-align: left;
   background: #fbfcfe;
   border: 1px solid rgba(15, 23, 42, 0.09);
-  border-radius: 18px;
+  border-radius: 10px;
   box-shadow: var(--shadow-window);
   overflow: hidden;
 }
@@ -551,12 +551,12 @@ body:not([data-lang='en']) .lang-toggle .lang-en { color: var(--ink-2); font-wei
   color: var(--ink-1);
   background: rgba(15, 23, 42, 0.055);
   padding: 10px 14px;
-  border-radius: 18px 18px 10px 18px;
+  border-radius: 18px;
 }
 .chat-card {
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--hairline-soft);
-  border-radius: 14px;
+  border-radius: 10px;
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
   padding: 12px 14px;
 }
