@@ -107,18 +107,6 @@ window.DEMO_EN = {
   'log.i11': 'First public release: macOS and Windows desktop builds, with projects and sessions, tool calls, permission prompts and messaging channels.',
   'log.more': 'All versions and installers →',
 
-  /* —— 首页:下一步计划（与汇报稿「后续工作 · 四个方向」同源） —— */
-  'road.eyebrow': 'Next steps',
-  'road.title': 'Four <em>directions</em>',
-  'road.t1': 'Sub-agents',
-  'road.d1': 'Decomposition and parallel execution within a single task: the main agent divides a task into sub-tasks — literature retrieval, batch document parsing — which sub-agents carry out separately, and it consolidates and selects among their results. Sub-agent execution is recorded in the same form as single-agent execution, so that the process remains reproducible.',
-  'road.t2': 'Incorporating the centre’s own medical models',
-  'road.d2': 'The medical models developed at this centre are to be incorporated into the system, either as the model that performs the reasoning or as tools invoked for specific tasks. They are connected in the same manner as general-purpose models, may be deployed within the institution, and the data concerned is processed locally.',
-  'road.t3': 'Quantitative evaluation of the system',
-  'road.d3': 'An evaluation set of research tasks together with comparable metrics, including task completion, the number of execution steps and the time taken, and the number of researcher interventions. The session records the system retains serve directly as evaluation samples for comparing models and versions.',
-  'road.t4': 'Memory and self-improvement',
-  'road.d4': 'A memory mechanism across sessions retains confirmed facts and researcher preferences for subsequent sessions. Data accumulated in use may be applied to model training and connected with the training and evaluation facilities already established at this centre: the retained records support quantitative evaluation, the evaluation results inform training, and the improved model is returned to use.',
-
   /* —— 核心特点页 —— */
   'cap.eyebrow': 'Core capabilities',
   'cap.title': 'Capabilities and <em>mechanisms</em>',

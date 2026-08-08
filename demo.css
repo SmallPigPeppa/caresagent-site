@@ -1000,8 +1000,8 @@ html { scroll-padding-top: 80px; }
 .next-row { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px; width: var(--rail-w); margin: 96px auto 0; padding-top: 40px; border-top: 1px solid var(--hairline-soft); }
 .next-row .nr-label { font-size: 13px; color: var(--ink-3); margin-right: 4px; }
 
-/* 7) 更新日志：双栏账簿(版本/日期 | 条目)。刻意不用竖脊时间线——紧邻的
-   「下一步计划」已经是 ladder，两个相邻区块用同一种脊柱会读成重复。 */
+/* 7) 更新日志：双栏账簿(版本/日期 | 条目)。刻意不用竖脊时间线——版本号本身
+   已经排出了顺序，再加一条脊柱是把同一件事说两遍。 */
 .changelog { list-style: none; max-width: 760px; margin: 40px auto 0; padding: 0; }
 .cl-entry { display: grid; grid-template-columns: 128px 1fr; gap: 20px; padding: 22px 0; border-top: 1px solid var(--hairline-soft); }
 .cl-entry:first-child { border-top: 0; padding-top: 2px; }
