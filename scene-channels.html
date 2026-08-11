@@ -5,7 +5,7 @@
   <script>document.documentElement.className += ' js';</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CaresAgent — 场景 · 消息渠道</title>
-  <meta name="description" content="将 CaresAgent 接入微信、飞书或企业微信：消息流入即成会话，产物沿同一渠道回传。本页说明各渠道的接入方式、收发身份与能力范围。" />
+  <meta name="description" content="将 CaresAgent 接入微信、飞书或企业微信：消息流入即成会话，输出沿同一渠道回传。本页说明各渠道的接入方式、收发身份与能力范围。" />
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
   <link rel="stylesheet" href="styles.css" />
@@ -14,14 +14,14 @@
   <script>
     window.DEMO_EN_META = {
       title: 'CaresAgent — Scenario · Channels',
-      description: 'Connect CaresAgent to WeChat, Feishu or WeCom: incoming messages become sessions, and artifacts return over the same channel. This page describes how each channel connects, its send/receive identity, and its capabilities.'
+      description: 'Connect CaresAgent to WeChat, Feishu or WeCom: incoming messages become sessions, and outputs return over the same channel. This page describes how each channel connects, its send/receive identity, and its capabilities.'
     };
   </script>
   <script>Object.assign(window.DEMO_EN, {
     'scx.df.eyebrow': 'Mechanism',
     'scx.df.h': 'File return and outbound messages',
     'scx.df.t1': 'Files return over the original channel',
-    'scx.df.d1': 'Files produced by the agent are sent back over the same channel the message arrived on — no re-upload, no external link. On desktop, the same artifact is saved into the project folder.',
+    'scx.df.d1': 'Files produced by the agent are sent back over the same channel the message arrived on — no re-upload, no external link. On desktop, the same output is saved into the project folder.',
     'scx.df.t2': 'Outbound messages are staged as drafts first',
     'scx.df.d2': 'Messages to customers and customer groups are first staged as drafts in your WeCom group-send assistant and sent from within WeCom; messages to colleagues and internal groups can be sent directly (text only, visible scope of at most 10 people).',
     'scx.df.demo.meta': 'Back over WeChat · 2.4 MB',
@@ -73,7 +73,7 @@
       <nav class="nav-links" aria-label="主导航">
         <a href="features.html" data-i18n="nav.features">核心特点</a>
         <div class="nav-dd">
-          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <div class="nav-dd-menu">
             <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
             <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
@@ -90,7 +90,7 @@
         </button>
         <a class="btn btn-primary btn-sm" href="download.html" data-i18n="nav.cta">下载</a>
         <details class="nav-menu" id="navMenu">
-          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></summary>
+          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-linecap="round"/></svg></summary>
           <div class="nav-menu-panel">
             <a href="features.html" data-i18n="nav.features">核心特点</a>
             <a href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
@@ -113,7 +113,7 @@
       <div class="page-hero-inner">
         <p class="section-eyebrow reveal" data-i18n="sc2.eyebrow">场景 · 消息渠道</p>
         <h1 class="reveal" data-i18n-html="ch.title">在团队<em>已有的聊天工具</em>里使用它</h1>
-        <p class="page-lead reveal" data-i18n="ch.sub">接入微信、飞书或企业微信：消息流入即成会话，产物沿同一渠道回传。</p>
+        <p class="page-lead reveal" data-i18n="ch.sub">接入微信、飞书或企业微信：消息流入即成会话，输出沿同一渠道回传。</p>
         <div class="scene-switcher reveal">
           <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
           <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
@@ -127,7 +127,7 @@
     <section class="section">
       <div class="cx-stage reveal" style="margin:44px auto 0"><div class="cx-stage-glow" aria-hidden="true"></div><div data-connect></div></div>
       <div class="demo-note reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.5"/></svg>
         <span data-i18n-html="ch.connect.d">把微信、飞书或企业微信接入 CaresAgent：微信与飞书扫码连接，企业微信校验 AI 机器人凭据。</span>
       </div>
 
@@ -211,7 +211,7 @@
         <h2 class="section-title" style="font-size:clamp(22px,3vw,30px)" data-i18n="scx.df.h">文件回传与消息外发</h2>
       </div>
       <div class="demo-note reveal" style="margin-top:40px;flex-direction:column;gap:14px;align-items:stretch">
-        <span><b data-i18n="scx.df.t1">文件沿原渠道回传</b> <span data-i18n="scx.df.d1">智能体生成的文件沿消息进入的同一渠道发回，不重新上传、不经外部链接。在桌面端使用时，同一份产物直接保存在项目文件夹中。</span></span>
+        <span><b data-i18n="scx.df.t1">文件沿原渠道回传</b> <span data-i18n="scx.df.d1">智能体生成的文件沿消息进入的同一渠道发回，不重新上传、不经外部链接。在桌面端使用时，同一份输出直接保存在项目文件夹中。</span></span>
         <span><b data-i18n="scx.df.t2">对外消息先生成草稿</b> <span data-i18n="scx.df.d2">面向客户与客户群的消息先生成草稿，暂存至你的企业微信「群发助手」，在企业微信中发送；面向同事与内部群可直接发送（仅文本，可见范围不超过 10 人）。</span></span>
       </div>
       <div class="df-demos reveal" style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px">
@@ -221,11 +221,11 @@
             <div class="f-name">slides_draft.pptx</div>
             <div class="f-meta" data-i18n="scx.df.demo.meta">经微信回传 · 2.4 MB</div>
           </div>
-          <span class="f-sent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="scx.df.demo.sent">已送达</span></span>
+          <span class="f-sent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="scx.df.demo.sent">已送达</span></span>
         </div>
         <div class="cv-outbound pending">
           <div class="cv-ob-head">
-            <span class="cv-ob-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span>
+            <span class="cv-ob-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></span>
             <span class="cv-ob-title" data-i18n="scx.df.demo.ob">已暂存进群发助手</span>
           </div>
           <div class="cv-ob-targets"><span class="tg" data-i18n="scx.df.demo.tg">客户群 · 12</span></div>
@@ -234,7 +234,7 @@
       </div>
 
       <div class="scene-result reveal">
-        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>
         <p data-i18n-html="sc2.result"><b>在微信 / 飞书 / 企业微信中收发任务，文件沿同一渠道回传。</b></p>
       </div>
     </section>

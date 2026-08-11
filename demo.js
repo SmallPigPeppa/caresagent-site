@@ -25,11 +25,10 @@
     file: '<path d="M6 3.5h7L18 8v12.5H6V3.5Z"/><path d="M13 3.5V8h4.5"/>',
     scan: '<path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16M4 12h16"/>'
   };
-  function svg(name, cls, sw) {
+  // 不写 stroke-width:粗细由 styles.css 的 --icon-stroke 一处定义
+  function svg(name, cls) {
     return (
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' +
-      (sw || 1.7) +
-      '" stroke-linecap="round" stroke-linejoin="round" class="' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" class="' +
       (cls || '') +
       '" aria-hidden="true">' +
       (IC[name] || '') +
@@ -267,7 +266,7 @@
       var m = sec.querySelector('[data-us-model]');
       var f = sec.querySelector('[data-us-folder]');
       var p = sec.querySelector('[data-us-plan]');
-      var a = sec.querySelector('[data-us-artifacts]');
+      var a = sec.querySelector('[data-us-outputs]');
       if (m) loopModel(m);
       if (f) loopFiles(f, 700);
       if (p) loopPlan(p);
@@ -277,7 +276,7 @@
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       sec.querySelectorAll('.cfg-input').forEach(function (inp) { inp.innerHTML = '<span>' + (inp.getAttribute('data-type') || '') + '</span>'; });
       sec.querySelectorAll('.cfg-folder').forEach(function (f) { f.classList.add('picked'); });
-      sec.querySelectorAll('[data-us-folder], [data-us-artifacts]').forEach(function (box) {
+      sec.querySelectorAll('[data-us-folder], [data-us-outputs]').forEach(function (box) {
         box.classList.add('us-anim');
         box.querySelectorAll('.rail-file').forEach(function (f) { f.classList.add('show'); });
       });
@@ -429,7 +428,7 @@
       var cards = CONNECT.map(function (c) {
         var ch = CHANNELS[c.id];
         var foot = connected[c.id]
-          ? '<span class="cx-account">' + c.account + '</span><button class="cx-disconnect" data-act="disconnect" data-id="' + c.id + '">' + svg('link', '', 1.8) + (currentLang === 'en' ? 'Disconnect' : '断开连接') + '</button>'
+          ? '<span class="cx-account">' + c.account + '</span><button class="cx-disconnect" data-act="disconnect" data-id="' + c.id + '">' + svg('link', '') + (currentLang === 'en' ? 'Disconnect' : '断开连接') + '</button>'
           : '<button class="cx-connect" data-act="connect" data-id="' + c.id + '" style="background:' + ch.btn + '">' + (currentLang === 'en' ? 'Connect' : '连接') + '</button>';
         return (
           '<div class="cx-card">' +
@@ -446,13 +445,13 @@
         '</p><ul><li>' +
         (currentLang === 'en' ? 'Friends / colleagues message you → the agent reads, plans and replies' : '好友 / 同事发来消息 → 智能体阅读、规划并回复') +
         '</li><li>' +
-        (currentLang === 'en' ? 'Files are handed back over the same channel' : '产物从同一渠道原样回传') +
+        (currentLang === 'en' ? 'Files are handed back over the same channel' : '输出从同一渠道原样回传') +
         '</li><li>' +
         (currentLang === 'en' ? 'Identity is a bot / app, not your personal account' : '收发身份是机器人 / 应用，并非你的本人账号') +
         '</li></ul></div>';
       root.innerHTML =
         '<div class="cx-modal"><div class="cx-head"><span class="cx-head-ico">' +
-        svg('file', '', 1.8).replace(IC.file, '<rect x="4.5" y="3" width="11" height="18" rx="2.4"/><path d="M9 18.2h2"/>') +
+        svg('file', '').replace(IC.file, '<rect x="4.5" y="3" width="11" height="18" rx="2.4"/><path d="M9 18.2h2"/>') +
         '</span><div><h3>' +
         (currentLang === 'en' ? 'Connect phone' : '连接手机') +
         '</h3><p>' +
@@ -467,13 +466,13 @@
       var ch = CHANNELS[c.id];
       var inner;
       if (success) {
-        inner = '<div class="qr-success"><span class="check">' + svg('check', '', 2.4) + '</span><span>' + (currentLang === 'en' ? 'Connected' : '已连接') + '</span></div>';
+        inner = '<div class="qr-success"><span class="check">' + svg('check', '') + '</span><span>' + (currentLang === 'en' ? 'Connected' : '已连接') + '</span></div>';
       } else {
         inner = fauxQR(c.id) + '<span class="scanline"></span>';
       }
       root.innerHTML =
         '<div class="cx-modal"><div class="cx-detail"><div class="cx-detail-bar">' +
-        '<button class="cx-back" data-act="back">' + svg('link', '', 1.9).replace(IC.link, '<path d="M14 5l-7 7 7 7"/>') + '</button>' +
+        '<button class="cx-back" data-act="back">' + svg('link', '').replace(IC.link, '<path d="M14 5l-7 7 7 7"/>') + '</button>' +
         '<span class="cx-ico" style="width:22px;height:22px;background:url(' + ch.icon + ') center/cover"></span>' +
         '<span class="cx-detail-title">' + (currentLang === 'en' ? 'Connect ' : '连接') + L(ch.name) + '</span></div>' +
         '<div class="cx-qr-wrap"><div class="cx-qr' + (success ? ' is-success' : '') + '">' + inner + '</div>' +
@@ -489,7 +488,7 @@
       if (state === 'success') {
         root.innerHTML =
           '<div class="cx-modal"><div class="cx-detail"><div class="cx-form-success"><span class="check">' +
-          svg('check', '', 2.4) +
+          svg('check', '') +
           '</span><span class="title">' + (currentLang === 'en' ? 'Connected' : '连接成功') + '</span>' +
           '<span class="sub">' + (currentLang === 'en' ? 'The bot now receives @-mentions and replies over the long connection.' : '机器人已就绪：被 @ 时即可经长连接收发并回复。') + '</span></div></div></div>';
         view.stage = 'form-success';
@@ -500,18 +499,18 @@
         .join('');
       root.innerHTML =
         '<div class="cx-modal"><div class="cx-detail"><div class="cx-detail-bar">' +
-        '<button class="cx-back" data-act="back">' + svg('link', '', 1.9).replace(IC.link, '<path d="M14 5l-7 7 7 7"/>') + '</button>' +
+        '<button class="cx-back" data-act="back">' + svg('link', '').replace(IC.link, '<path d="M14 5l-7 7 7 7"/>') + '</button>' +
         '<span class="cx-ico" style="width:22px;height:22px;background:url(' + ch.icon + ') center/cover"></span>' +
         '<span class="cx-detail-title">' + (currentLang === 'en' ? 'Connect WeCom' : '连接企业微信') + '</span></div>' +
         '<form class="cx-form" data-act="submit"><p class="cx-form-intro">' + L(c.intro) + '</p>' +
         '<div class="cx-field"><label>AIBotID</label><input class="cx-input" name="botid" placeholder="AIBotID" autocomplete="off" /></div>' +
         '<div class="cx-field"><label>' + (currentLang === 'en' ? 'Bot Secret' : 'Bot Secret（长连接密钥）') + '</label><input class="cx-input" name="secret" type="password" placeholder="Bot Secret" autocomplete="off" /></div>' +
         '<button type="button" class="cx-disclosure" data-act="toggle-steps" aria-expanded="false">' +
-        svg('link', '', 2).replace(IC.link, '<path d="M6 9l6 6 6-6"/>') +
+        svg('link', '').replace(IC.link, '<path d="M6 9l6 6 6-6"/>') +
         (currentLang === 'en' ? 'How do I get these?' : '如何获取？') +
         '</button>' +
         '<div class="cx-steps" hidden><ol>' + stepsHtml + '</ol><a class="console-link" href="https://work.weixin.qq.com/wework_admin/loginpage_wx" target="_blank" rel="noopener">' +
-        svg('link', '', 1.8) + (currentLang === 'en' ? 'Open WeCom admin console' : '打开企业微信管理后台') + '</a></div>' +
+        svg('link', '') + (currentLang === 'en' ? 'Open WeCom admin console' : '打开企业微信管理后台') + '</a></div>' +
         '<button type="submit" class="cx-submit">' + (currentLang === 'en' ? 'Connect' : '连接') + '</button>' +
         '</form></div></div>';
       view.stage = 'form';
@@ -701,7 +700,7 @@
         { t: 'tool', icon: 'ppt', label: { zh: '生成 PPT · slides_draft.pptx', en: 'Create PowerPoint · slides_draft.pptx' } },
         { t: 'proc-end' },
         { t: 'answer', text: { zh: '完成 ✅ 15 页汇报 PPT，图表全部为论文原图（非 AI 臆造），按「背景 → 方法 → 影像发现 → 结论」编排。', en: 'Done ✅ A 15-slide deck — original paper figures (not AI-fabricated), ordered Background → Methods → Imaging findings → Conclusions.' } },
-        { t: 'artifact', name: 'slides_draft.pptx', kind: 'ppt', size: { zh: '2.4 MB · 15 页', en: '2.4 MB · 15 slides' }, done: { zh: '已生成 · 可下载', en: 'Produced · download' } }
+        { t: 'output', name: 'slides_draft.pptx', kind: 'ppt', size: { zh: '2.4 MB · 15 页', en: '2.4 MB · 15 slides' }, done: { zh: '已生成 · 可下载', en: 'Produced · download' } }
       ]
     },
     dataanalysis: {
@@ -716,7 +715,7 @@
         { t: 'tool', icon: 'img', label: { zh: '执行 Python · matplotlib → metrics.png', en: 'Python code · matplotlib → metrics.png' } },
         { t: 'proc-end' },
         { t: 'answer', text: { zh: '本月 GMV 环比 +12.3%；华东转化率 −4pt（建议核查投放）。每条结论都注明了数据来源。', en: 'GMV +12.3% MoM; East-China conversion −4pt (worth checking ad spend). Every claim cites its data source.' } },
-        { t: 'artifact', name: 'report.pdf', kind: 'pdf', size: { zh: '420 KB · 含图表', en: '420 KB · with charts' }, done: { zh: '已生成 · 可下载', en: 'Produced · download' } }
+        { t: 'output', name: 'report.pdf', kind: 'pdf', size: { zh: '420 KB · 含图表', en: '420 KB · with charts' }, done: { zh: '已生成 · 可下载', en: 'Produced · download' } }
       ]
     },
     ocr: {
@@ -731,7 +730,7 @@
         { t: 'tool', icon: 'img', label: { zh: '提取文档图片 · notes_p3.jpg · 1 图', en: 'Extract document figures · notes_p3.jpg · 1 figure' } },
         { t: 'proc-end' },
         { t: 'answer', text: { zh: '已转为 Markdown：1 段正文、1 个表格(HTML)、3 个公式(LaTeX)、1 张裁出的插图，保持阅读顺序。原文↔解析可在阅读器里逐块核对。', en: 'Converted to Markdown: 1 text block, 1 table (HTML), 3 formulas (LaTeX) and 1 cropped figure, in reading order. Check it block-by-block against the original in the reader.' } },
-        { t: 'artifact', name: 'notes_p3.md', kind: 'md', size: { zh: '含 1 表 · 3 公式 · 1 图', en: '1 table · 3 formulas · 1 figure' }, done: { zh: '已生成 · 可下载', en: 'Produced · download' } }
+        { t: 'output', name: 'notes_p3.md', kind: 'md', size: { zh: '含 1 表 · 3 公式 · 1 图', en: '1 table · 3 formulas · 1 figure' }, done: { zh: '已生成 · 可下载', en: 'Produced · download' } }
       ]
     },
     browserqa: {
@@ -746,7 +745,7 @@
         { t: 'tool', icon: 'img', label: { zh: '截图 · login_ok.png / dashboard.png', en: 'Screenshot · login_ok.png / dashboard.png' } },
         { t: 'proc-end' },
         { t: 'answer', text: { zh: '通过 ✅ 登录流程正常：表单校验、提交、跳转均符合预期，3 张截图为证。', en: 'Pass ✅ Login works — validation, submit and redirect all as expected, 3 screenshots attached.' } },
-        { t: 'artifact', name: 'login_ok.png', kind: 'img', size: { zh: '1440×900', en: '1440×900' }, done: { zh: '已生成 · 可下载', en: 'Produced · download' } }
+        { t: 'output', name: 'login_ok.png', kind: 'img', size: { zh: '1440×900', en: '1440×900' }, done: { zh: '已生成 · 可下载', en: 'Produced · download' } }
       ]
     },
     mpdraft: {
@@ -761,7 +760,7 @@
         { t: 'tool', icon: 'file', label: { zh: '创建公众号草稿 · 草稿箱', en: 'Create WeChat draft · draft box' } },
         { t: 'proc-end' },
         { t: 'answer', text: { zh: '已生成本周 AI 资讯草稿（7 条），保存在公众号草稿箱，等你在后台确认后发布。', en: 'Drafted this week’s AI digest (7 items) into the OA draft box — confirm in the console to publish.' } },
-        { t: 'artifact', name: 'ai_news_draft', kind: 'img', size: { zh: '7 条 · 已排版', en: '7 items · formatted' }, done: { zh: '已存入草稿箱', en: 'Saved to draft box' } }
+        { t: 'output', name: 'ai_news_draft', kind: 'img', size: { zh: '7 条 · 已排版', en: '7 items · formatted' }, done: { zh: '已存入草稿箱', en: 'Saved to draft box' } }
       ]
     }
   };
@@ -799,7 +798,7 @@
       var ch = CHANNELS[s.ch];
       var ctx = s.ctx ? '<span class="ctx"> · ' + L(s.ctx) + '</span>' : '';
       var att = s.att
-        ? '<span class="att">' + svg(s.att.kind === 'xls' ? 'xls' : s.att.kind === 'img' ? 'img' : 'file', '', 1.7) + s.att.name + '</span>'
+        ? '<span class="att">' + svg(s.att.kind === 'xls' ? 'xls' : s.att.kind === 'img' ? 'img' : 'file', '') + s.att.name + '</span>'
         : '';
       var el = document.createElement('div');
       el.className = 'cv-step cv-inbound';
@@ -813,7 +812,7 @@
     // 桌面端：用户直接输入的提问（无渠道徽标）
     function makePrompt(s) {
       var att = s.att
-        ? '<span class="att">' + svg(s.att.kind === 'xls' ? 'xls' : s.att.kind === 'img' ? 'img' : 'file', '', 1.7) + s.att.name + '</span>'
+        ? '<span class="att">' + svg(s.att.kind === 'xls' ? 'xls' : s.att.kind === 'img' ? 'img' : 'file', '') + s.att.name + '</span>'
         : '';
       var el = document.createElement('div');
       el.className = 'cv-step cv-inbound cv-prompt';
@@ -849,11 +848,11 @@
       if (!proc) return;
       var row = document.createElement('div');
       row.className = 'cv-tool';
-      row.innerHTML = svg(s.icon, 'tk-ico running', 1.8) + '<code>' + L(s.label) + '</code>';
+      row.innerHTML = svg(s.icon, 'tk-ico running') + '<code>' + L(s.label) + '</code>';
       proc.feed.appendChild(row);
       timers.push(setTimeout(function () {
         var ic = row.querySelector('.tk-ico');
-        if (ic) { ic.classList.remove('running'); ic.outerHTML = svg('check', 'tk-ico', 2); }
+        if (ic) { ic.classList.remove('running'); ic.outerHTML = svg('check', 'tk-ico'); }
       }, 850));
     }
 
@@ -883,30 +882,30 @@
       el.innerHTML =
         '<span class="f-ico ' + s.kind + '">' + s.kind.toUpperCase() + '</span>' +
         '<span class="f-main"><span class="f-name">' + s.name + '</span><span class="f-meta">' + s.size + '</span></span>' +
-        '<span class="f-sent">' + svg('check', '', 2.2) + L(s.sent) + '</span>';
+        '<span class="f-sent">' + svg('check', '') + L(s.sent) + '</span>';
       return el;
     }
 
-    // 桌面端：生成的产物（下载卡）
-    function makeArtifact(s) {
+    // 桌面端：生成的输出（下载卡）
+    function makeOutput(s) {
       var sz = typeof s.size === 'string' ? s.size : L(s.size);
       var el = document.createElement('div');
-      el.className = 'cv-step cv-deliver cv-artifact';
+      el.className = 'cv-step cv-deliver cv-output';
       el.innerHTML =
         '<span class="f-ico ' + s.kind + '">' + s.kind.toUpperCase() + '</span>' +
         '<span class="f-main"><span class="f-name">' + s.name + '</span><span class="f-meta">' + sz + '</span></span>' +
-        '<span class="f-sent">' + svg('check', '', 2.2) + (s.done ? L(s.done) : (currentLang === 'en' ? 'Produced' : '已生成')) + '</span>';
+        '<span class="f-sent">' + svg('check', '') + (s.done ? L(s.done) : (currentLang === 'en' ? 'Produced' : '已生成')) + '</span>';
       return el;
     }
 
     function makeOutbound(s) {
       var ic = s.status === 'sent' ? 'check' : s.status === 'pending' ? 'clock' : 'alert';
       var targets = (s.targets || []).map(function (t) { return '<span class="tg">' + L(t) + '</span>'; }).join('');
-      var links = (s.links || []).map(function (l) { return '<span class="lk">' + svg('link', '', 1.8) + L(l) + '</span>'; }).join('');
+      var links = (s.links || []).map(function (l) { return '<span class="lk">' + svg('link', '') + L(l) + '</span>'; }).join('');
       var el = document.createElement('div');
       el.className = 'cv-step cv-outbound ' + s.status;
       el.innerHTML =
-        '<div class="cv-ob-head"><span class="cv-ob-ico">' + svg(ic, '', 2) + '</span><span class="cv-ob-title">' + L(s.title) + '</span></div>' +
+        '<div class="cv-ob-head"><span class="cv-ob-ico">' + svg(ic, '') + '</span><span class="cv-ob-title">' + L(s.title) + '</span></div>' +
         (targets ? '<div class="cv-ob-targets">' + targets + '</div>' : '') +
         (s.text ? '<p class="cv-ob-text">' + L(s.text) + '</p>' : '') +
         (links ? '<div class="cv-ob-links">' + links + '</div>' : '') +
@@ -921,7 +920,7 @@
       stage.innerHTML = '';
       setTitle();
       var t = 0;
-      var DELAY = { inbound: 700, prompt: 700, 'proc-start': 650, narration: 1500, tool: 950, 'proc-end': 700, answer: 850, deliver: 750, artifact: 800, outbound: 850 };
+      var DELAY = { inbound: 700, prompt: 700, 'proc-start': 650, narration: 1500, tool: 950, 'proc-end': 700, answer: 850, deliver: 750, output: 800, outbound: 850 };
       script.steps.forEach(function (s, i) {
         t += DELAY[s.t] != null ? DELAY[s.t] : 700;
         timers.push(setTimeout(function () {
@@ -933,7 +932,7 @@
           else if (s.t === 'proc-end') endProc();
           else if (s.t === 'answer') appear(makeAnswer(s));
           else if (s.t === 'deliver') appear(makeDeliver(s));
-          else if (s.t === 'artifact') appear(makeArtifact(s));
+          else if (s.t === 'output') appear(makeOutput(s));
           else if (s.t === 'outbound') appear(makeOutbound(s));
           stage.scrollTop = stage.scrollHeight;
         }, t));
@@ -971,7 +970,7 @@
       function setIcon(step, kind) {
         var slot = step.querySelector('.pico');
         if (!slot) return;
-        if (kind === 'done') slot.innerHTML = '<span class="pico-done">' + svg('check', '', 2.4) + '</span>';
+        if (kind === 'done') slot.innerHTML = '<span class="pico-done">' + svg('check', '') + '</span>';
         else if (kind === 'running') slot.innerHTML = '<span class="pico-run"></span>';
         else slot.innerHTML = '<span class="pico-ring"></span>';
       }
@@ -1013,7 +1012,7 @@
       var orig = btn.textContent;
       btn.addEventListener('click', function () {
         root.classList.add('granted');
-        btn.innerHTML = svg('check', '', 2.4).replace('viewBox', 'style="width:14px;height:14px;vertical-align:-2px" viewBox') + ' ' + (currentLang === 'en' ? 'Allowed' : '已允许');
+        btn.innerHTML = svg('check', '').replace('viewBox', 'style="width:14px;height:14px;vertical-align:-2px" viewBox') + ' ' + (currentLang === 'en' ? 'Allowed' : '已允许');
         setTimeout(function () {
           root.classList.remove('granted');
           btn.textContent = orig;
@@ -1172,7 +1171,7 @@
         if (st && c.getAttribute('data-ch')) st.textContent = currentLang === 'en' ? 'Not connected' : '未连接';
       });
     }
-    var CHK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4 4 10-10.5"/></svg>';
+    var CHK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4 4 10-10.5"/></svg>';
     function play() {
       started = true;
       reset();

@@ -48,9 +48,23 @@
   --font-mono: 'SF Mono', 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, Menlo, monospace;
 
   --rail-w: min(1120px, calc(100vw - 48px));
+  /* 全站字形唯一的笔画粗细,与桌面端 --cl-icon-stroke 同值同理 */
+  --icon-stroke: 1px;
 }
 
 * { box-sizing: border-box; }
+
+/* 一条规则管全站图标。内联 SVG 的 stroke-width 记在 viewBox 单位里,同一个
+   1.8 在 13px 的侧栏字形上是 0.98px、在 42px 的流程箭头上是 3.8px —— 这就是
+   站内 103 处 stroke-width 从 1.6 漂到 2.4 的原因,每一处都在替自己的尺寸
+   找补。non-scaling-stroke 把 viewBox 从算式里拿掉:下面这个数就是屏幕像素,
+   多大的字形都一样,于是粗细只在这里写一次。
+   (印章徽标是填色不描边,不受影响。) */
+svg :is(path, circle, rect, line, polyline, polygon, ellipse) {
+  vector-effect: non-scaling-stroke;
+}
+
+svg { stroke-width: var(--icon-stroke); }
 html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 body {
   margin: 0;
@@ -658,7 +672,7 @@ body:not([data-lang='en']) .lang-toggle .lang-en { color: var(--ink-2); font-wei
 .rail-step.done { color: var(--ink-3); }
 .rail-step.done::before {
   border-color: transparent;
-  background: #128a4a url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M3 6.2 5.2 8.4 9 4.2" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>') center/contain no-repeat;
+  background: #128a4a url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12"><path d="M3 6.2 5.2 8.4 9 4.2" fill="none" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>') center/contain no-repeat;
 }
 .rail-step.live { color: var(--ink-1); font-weight: 500; }
 .rail-step.live::before {

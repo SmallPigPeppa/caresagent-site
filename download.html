@@ -5,7 +5,7 @@
   <script>document.documentElement.className += ' js';</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CaresAgent — 下载</title>
-  <meta name="description" content="下载 CaresAgent：中国科学院香港创新研究院人工智能与机器人创新中心（CAIR）研发的 Cares AI 智能体系统。当前版本 v0.3.0：macOS（Apple 芯片）已发布，Windows 与 Linux 版本尚未发布。" />
+  <meta name="description" content="下载 CaresAgent：中国科学院香港创新研究院人工智能与机器人创新中心（CAIR）研发的 Cares AI 智能体系统。当前版本 v0.4.0：macOS（Apple 芯片）已发布，Windows 与 Linux 版本尚未发布。" />
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
   <link rel="stylesheet" href="styles.css" />
@@ -14,11 +14,11 @@
   <script>
     window.DEMO_EN_META = {
       title: 'CaresAgent — Download',
-      description: 'Download CaresAgent, the Cares AI agent system developed by the Centre for Artificial Intelligence and Robotics (CAIR), HKISI-CAS. Current version v0.3.0: macOS (Apple silicon) is available; the Windows and Linux builds are not yet released.'
+      description: 'Download CaresAgent, the Cares AI agent system developed by the Centre for Artificial Intelligence and Robotics (CAIR), HKISI-CAS. Current version v0.4.0: macOS (Apple silicon) is available; the Windows and Linux builds are not yet released.'
     };
     Object.assign(window.DEMO_EN, {
       'cfg.nav.project': 'Project', 'cfg.nav.model': 'Model', 'cfg.nav.channel': 'Connect phone',
-      'cfg.proj.note': 'The only required step: tools run inside the project directory, and artifacts are written back to it.',
+      'cfg.proj.note': 'The only required step: tools run inside the project directory, and outputs are written back to it.',
       'cfg.model.note': 'Any OpenAI-compatible service; changes apply instantly. Settings sits at the bottom of the sidebar.',
       'cfg.ch.title': 'Connect your phone (optional)',
       'cfg.ch.note': 'Chat with the agent from WeChat, Feishu or WeCom whenever you like; skipping this changes nothing. The entry point is “Connect phone” at the bottom of the sidebar.',
@@ -35,7 +35,7 @@
       'dlx.req.d3': 'An OpenAI-compatible service of your own: a model endpoint, an API key and a model name. No model ships inside the app.',
       'dlx.setup.eyebrow': 'First launch',
       'dlx.setup.title': 'A project directory and a model service',
-      'dlx.setup.result': 'Configuration and data — model keys, channel tokens, projects and artifacts — are not uploaded to CAIR.',
+      'dlx.setup.result': 'Configuration and data — model keys, channel tokens, projects and outputs — are not uploaded to CAIR.',
       'dl.soon': 'Forthcoming'
     });
   </script>
@@ -67,7 +67,7 @@
       <nav class="nav-links" aria-label="主导航">
         <a href="features.html" data-i18n="nav.features">核心特点</a>
         <div class="nav-dd">
-          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button class="nav-dd-btn" type="button" aria-haspopup="true"><span data-i18n="nav.scenarios">场景</span><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <div class="nav-dd-menu">
             <a href="scene-research.html"><span data-i18n="sc.research.t">科研产出</span></a>
             <a href="scene-office.html"><span data-i18n="sc.office.t">自动化办公</span></a>
@@ -84,7 +84,7 @@
         </button>
         <a class="btn btn-primary btn-sm" href="download.html" data-i18n="nav.cta">下载</a>
         <details class="nav-menu" id="navMenu">
-          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></summary>
+          <summary aria-label="菜单"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3.5 5.5h13M3.5 10h13M3.5 14.5h13" stroke="currentColor" stroke-linecap="round"/></svg></summary>
           <div class="nav-menu-panel">
             <a href="features.html" data-i18n="nav.features">核心特点</a>
             <a href="scene-research.html" data-i18n="sc.research.t">科研产出</a>
@@ -107,7 +107,7 @@
       <div class="page-hero-inner">
         <p class="section-eyebrow reveal" data-i18n="dl.eyebrow">下载</p>
         <h1 class="reveal" data-i18n-html="dl.title">下载 <em>CaresAgent</em></h1>
-        <p class="page-lead reveal"><span data-i18n="dl.sub">当前版本</span> <strong>v0.3.0</strong> · <span data-i18n="dl.date">2026 年 8 月发布</span></p>
+        <p class="page-lead reveal"><span data-i18n="dl.sub">当前版本</span> <strong>v0.4.0</strong> · <span data-i18n="dl.date">2026 年 8 月发布</span></p>
       </div>
     </section>
 
@@ -127,7 +127,7 @@
             </div>
           </div>
           <a class="btn btn-primary dl-btn is-soon" href="" aria-disabled="true">
-            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v9.5m0 0L6 8.7m4 3.8 4-3.8M4 16.5h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v9.5m0 0L6 8.7m4 3.8 4-3.8M4 16.5h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span data-i18n="dl.macBtn">下载 DMG（Apple 芯片）</span>
           </a>
           <p class="dl-meta">.dmg · 213 MB</p>
@@ -152,7 +152,7 @@
             </div>
           </div>
           <a class="btn btn-primary dl-btn is-soon" href="" aria-disabled="true">
-            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v9.5m0 0L6 8.7m4 3.8 4-3.8M4 16.5h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v9.5m0 0L6 8.7m4 3.8 4-3.8M4 16.5h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span data-i18n="dl.winBtn">下载 NSIS 安装包</span>
           </a>
           <p class="dl-meta">.exe · NSIS</p>
@@ -175,7 +175,7 @@
             </div>
           </div>
           <a class="btn btn-outline dl-btn is-soon" href="" aria-disabled="true">
-            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v9.5m0 0L6 8.7m4 3.8 4-3.8M4 16.5h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3v9.5m0 0L6 8.7m4 3.8 4-3.8M4 16.5h12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span data-i18n="dl.linBtn">下载 AppImage</span>
           </a>
           <p class="dl-meta">.AppImage</p>
@@ -212,19 +212,19 @@
         <div class="cfg-bar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><span class="cfg-title"></span></div>
         <div class="cfg-body">
           <div class="cfg-nav">
-            <div class="cfg-nav-item active" data-cfgnav="project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span data-i18n="cfg.nav.project">项目</span></div>
-            <div class="cfg-nav-item" data-cfgnav="model"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 4.5v2M12 17.5v2M4.5 12h2M17.5 12h2M6.7 6.7l1.4 1.4M15.9 15.9l1.4 1.4M17.3 6.7l-1.4 1.4M8.1 15.9l-1.4 1.4"/></svg><span data-i18n="cfg.nav.model">模型</span></div>
-            <div class="cfg-nav-item" data-cfgnav="channel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3.5" width="10" height="17" rx="2.4"/><path d="M10.5 17.5h3"/></svg><span data-i18n="cfg.nav.channel">连接手机</span></div>
+            <div class="cfg-nav-item active" data-cfgnav="project"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span data-i18n="cfg.nav.project">项目</span></div>
+            <div class="cfg-nav-item" data-cfgnav="model"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 4.5v2M12 17.5v2M4.5 12h2M17.5 12h2M6.7 6.7l1.4 1.4M15.9 15.9l1.4 1.4M17.3 6.7l-1.4 1.4M8.1 15.9l-1.4 1.4"/></svg><span data-i18n="cfg.nav.model">模型</span></div>
+            <div class="cfg-nav-item" data-cfgnav="channel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3.5" width="10" height="17" rx="2.4"/><path d="M10.5 17.5h3"/></svg><span data-i18n="cfg.nav.channel">连接手机</span></div>
           </div>
           <div class="cfg-panel">
             <div class="cfg-pane show" data-cfgpane="project">
               <p class="cfg-pane-title" data-i18n="cfg.proj.title">侧栏「项目」· 新建或打开</p>
               <div class="cfg-menu">
-                <div class="cfg-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5.5v13M5.5 12h13"/></svg><span data-i18n="cfg.proj.new">新建空项目</span></div>
-                <div class="cfg-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v1H6l-2.5 7V7.5Z"/><path d="M3.5 18.5 6 11h16l-2.5 7.5h-16Z"/></svg><span data-i18n="cfg.proj.open">打开文件夹</span></div>
+                <div class="cfg-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5.5v13M5.5 12h13"/></svg><span data-i18n="cfg.proj.new">新建空项目</span></div>
+                <div class="cfg-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v1H6l-2.5 7V7.5Z"/><path d="M3.5 18.5 6 11h16l-2.5 7.5h-16Z"/></svg><span data-i18n="cfg.proj.open">打开文件夹</span></div>
               </div>
-              <div class="cfg-folder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span class="fp">~/research/ad-imaging</span></div>
-              <p class="cfg-note" data-i18n="cfg.proj.note">开始前唯一必需的一步：工具在项目目录内运行，产物也写回该目录。</p>
+              <div class="cfg-folder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span class="fp">~/research/ad-imaging</span></div>
+              <p class="cfg-note" data-i18n="cfg.proj.note">开始前唯一必需的一步：工具在项目目录内运行，输出也写回该目录。</p>
             </div>
             <div class="cfg-pane" data-cfgpane="model">
               <p class="cfg-pane-title" data-i18n="cfg.model.title">设置 · 模型 — 接入你自己的模型</p>
@@ -243,7 +243,7 @@
           </div>
         </div>
       </div>
-      <p class="reveal" style="text-align:center;font-size:13px;line-height:1.7;color:var(--ink-3);max-width:600px;margin:26px auto 0" data-i18n="dlx.setup.result">模型密钥、渠道令牌、项目与产物等配置与数据均不会上传到 CAIR。</p>
+      <p class="reveal" style="text-align:center;font-size:13px;line-height:1.7;color:var(--ink-3);max-width:600px;margin:26px auto 0" data-i18n="dlx.setup.result">模型密钥、渠道令牌、项目与输出等配置与数据均不会上传到 CAIR。</p>
     </section>
 
     <!-- ============ 克制的下一步（取代重复的大卡片） ============ -->

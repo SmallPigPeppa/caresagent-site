@@ -35,7 +35,7 @@ window.DEMO_EN = {
   'shot.ghostHint': 'Press Enter to send',
   'shot.railcap': 'Session info', 'shot.perms': 'Permissions', 'shot.pm1': 'Shell command · This project',
   'shot.plan': 'Plan', 'shot.pl1': 'Parse PDF structure', 'shot.pl2': 'Crop paper figures', 'shot.pl3': 'Outline & pagination', 'shot.pl4': 'Render PPTX',
-  'shot.skills': 'Skills', 'shot.sk1': 'paper_ppt', 'shot.sk2': 'pdf_screenshot', 'shot.artifacts': 'Artifacts',
+  'shot.skills': 'Skills', 'shot.sk1': 'paper_ppt', 'shot.sk2': 'pdf_screenshot', 'shot.outputs': 'Outputs',
 
   /* —— 首页:概念 —— */
   'agent.eyebrow': 'Concept',
@@ -50,8 +50,8 @@ window.DEMO_EN = {
   'design.eyebrow': 'System design',
   'design.title': 'Projects, sessions and <em>execution</em>',
   'design.sub': 'Work is organised in three layers — project, session, execution; the full mechanism is described under Architecture.',
-  'design.t1': 'Project', 'design.d1': 'One working directory per research topic: literature, data and artifacts all live inside it.',
-  'design.t2': 'Session', 'design.d2': 'One session per task: the plan, the execution and the artifacts are kept in full and can be reviewed at any time.',
+  'design.t1': 'Project', 'design.d1': 'One working directory per research topic: literature, data and outputs all live inside it.',
+  'design.t2': 'Session', 'design.d2': 'One session per task: the plan, the execution and the outputs are kept in full and can be reviewed at any time.',
   'design.t3': 'Execution', 'design.d3': 'The agent combines tools (files, terminal, browser) and skills (paper parsing, deck generation) to complete the task.',
   'design.more': 'Architecture →',
 
@@ -71,7 +71,7 @@ window.DEMO_EN = {
   'usage.m4p': 'Processing',
   'usage.m4s1': 'Read file · review_2026.pdf', 'usage.m4s2': 'Extracting original figures…', 'usage.m4s3': 'Create PowerPoint · slides_draft.pptx',
   'usage.s5t': 'Collect the results',
-  'usage.s5d': 'Slides, reports and figures are written into the project directory and listed in the session’s artifact rail; the session is kept in full and every step can be reviewed.',
+  'usage.s5d': 'Slides, reports and figures are written into the project directory and listed in the session’s output rail; the session is kept in full and every step can be reviewed.',
   'usage.m5n': 'Also written to the project directory · sessions can be reviewed in full',
 
   /* —— 首页:特点 —— */
@@ -94,6 +94,11 @@ window.DEMO_EN = {
   'log.eyebrow': 'Changelog',
   'log.title': 'Released <em>versions</em>',
   'log.add': 'New', 'log.imp': 'Better', 'log.first': 'First',
+  'log.d4': 'August 2026',
+  'log.i41': 'Built-in editor: documents, spreadsheets, slides and PDFs open inside the application, where reading and editing happen on the same surface.',
+  'log.i42': 'Block-level editing: Word, PowerPoint and Excel files are edited by paragraph, cell and slide, without rewriting the whole file.',
+  'log.i43': 'Workspace file tree: the project directory is browsable in the panel, and any file in it opens directly.',
+  'log.i44': 'Reading a file: its text can be read and its page layout examined, so scans and figures are presented as they are laid out.',
   'log.d3': 'August 2026',
   'log.i31': 'Memory: confirmed facts and a researcher\u2019s preferences carry across sessions, and can be read, edited and deleted from the interface.',
   'log.i32': 'Figures in the conversation: flowcharts and diagrams an answer draws are rendered in place, and can be copied or saved as SVG or PNG.',
@@ -125,7 +130,7 @@ window.DEMO_EN = {
 
   /* —— 消息渠道页 —— */
   'ch.title': 'Use it inside <em>the chat tools your team already uses</em>',
-  'ch.sub': 'Connect WeChat, Feishu or WeCom: incoming messages become agent sessions, and artifacts return over the same channel.',
+  'ch.sub': 'Connect WeChat, Feishu or WeCom: incoming messages become agent sessions, and outputs return over the same channel.',
   'ch.connect.d': 'Connect WeChat, Feishu or WeCom to CaresAgent: WeChat and Feishu connect by QR scan, WeCom by validating an AI-bot credential.',
   'ch.wc.h': 'WeChat', 'ch.fs.h': 'Feishu', 'ch.wm.h': 'WeCom', 'ch.matrix.h': 'Capabilities',
   'ch.matrix.sub': 'What each channel supports and does not support.',
@@ -158,7 +163,7 @@ window.DEMO_EN = {
   'home.enter': 'Details →',
   'sc.research.t': 'Research output', 'sc.research.d': 'Paper into research deck and data analysis; figures come from the paper itself, and results can be checked item by item.',
   'sc.office.t': 'Office automation', 'sc.office.d': 'Web tasks run in the shared browser, recorded with step-by-step screenshots; Official-Account articles are saved to the draft box before publishing.',
-  'sc.channels.t': 'Messaging channels', 'sc.channels.d': 'Reach the agent from WeChat, Feishu or WeCom: assign tasks in your research group chat, and artifacts return over the same channel.',
+  'sc.channels.t': 'Messaging channels', 'sc.channels.d': 'Reach the agent from WeChat, Feishu or WeCom: assign tasks in your research group chat, and outputs return over the same channel.',
   'sc.ocr.t': 'Document parsing', 'sc.ocr.d': 'Literature, scans and PDF pages become structured Markdown: text in reading order, tables as HTML, formulas as LaTeX, figures cropped by layout.',
 
   /* —— 场景 · 科研产出 —— */
