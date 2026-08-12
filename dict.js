@@ -93,7 +93,11 @@ window.DEMO_EN = {
   /* —— 首页:更新日志（已发布版本） —— */
   'log.eyebrow': 'Changelog',
   'log.title': 'Released <em>versions</em>',
-  'log.add': 'New', 'log.imp': 'Better', 'log.first': 'First',
+  'log.add': 'New', 'log.imp': 'Better', 'log.first': 'First', 'log.fix': 'Fixed',
+  'log.d5': 'August 2026',
+  'log.i51': 'Reasoning models such as Qwen no longer leak their thinking into the visible answer.',
+  'log.i52': 'Arguments to connected (MCP) tools are coerced to their declared types, so loosely-typed calls no longer fail.',
+  'log.i53': 'Reasoning items are echoed back more robustly, avoiding rejected follow-up requests from some model services.',
   'log.d4': 'August 2026',
   'log.i41': 'Built-in editor: documents, spreadsheets, slides and PDFs open inside the application, where reading and editing happen on the same surface.',
   'log.i42': 'Block-level editing: Word, PowerPoint and Excel files are edited by paragraph, cell and slide, without rewriting the whole file.',
