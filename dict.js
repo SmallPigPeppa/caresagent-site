@@ -94,6 +94,8 @@ window.DEMO_EN = {
   'log.eyebrow': 'Changelog',
   'log.title': 'Released <em>versions</em>',
   'log.add': 'New', 'log.imp': 'Better', 'log.first': 'First', 'log.fix': 'Fixed',
+  'log.d9': 'August 2026',
+  'log.i91': 'Automatic updates: \u201cQuit and update\u201d could appear too early, so quitting then installed nothing and said nothing. It now shows \u201cPreparing\u2026\u201d first and offers the action only once the update can truly be applied.',
   'log.d8': 'August 2026',
   'log.i81': 'The browser panel driver was rewritten: an action confirms at the moment it runs whether its target is visible and unobstructed, and navigation and load completion are judged more accurately.',
   'log.i82': 'Link icons are fetched through an in-app protocol that sends only the site\u2019s domain \u2014 page paths and query strings never leave the machine.',
