@@ -1,15 +1,15 @@
 {
-  "version": "0.4.1",
+  "version": "0.4.2",
   "builds": [
     {
       "os": "mac",
       "arch": "arm64",
       "ext": ".dmg",
-      "file": "CaresAgent-0.4.1-mac-arm64.dmg",
-      "url": "https://github.com/SmallPigPeppa/caresagent-site/releases/download/v0.4.1/CaresAgent-0.4.1-mac-arm64.dmg",
-      "size": "218 MB",
-      "bytes": 228246928,
-      "sha256": "47816c9fdb3395df557621b8f50a4d72d664e9a76625d520361bb2eeb5bfe4ec"
+      "file": "CaresAgent-0.4.2-mac-arm64.dmg",
+      "url": "https://github.com/SmallPigPeppa/caresagent-site/releases/download/v0.4.2/CaresAgent-0.4.2-mac-arm64.dmg",
+      "size": "219 MB",
+      "bytes": 229976678,
+      "sha256": "2bea47ca64015fad8b293125b0943d97010991d9ee83019035f9d8116cd06cee"
     },
     {
       "os": "win",
