@@ -94,6 +94,8 @@ window.DEMO_EN = {
   'log.eyebrow': 'Changelog',
   'log.title': 'Released <em>versions</em>',
   'log.add': 'New', 'log.imp': 'Better', 'log.first': 'First', 'log.fix': 'Fixed',
+  'log.d11': 'August 2026',
+  'log.i111': 'The message box has its thin outline back \u2014 subtle at rest, one step firmer while focused.',
   'log.d10': 'August 2026',
   'log.i101': 'The app reopens by itself once an update has been applied \u2014 no manual restart.',
   'log.i102': 'When a new version is ready, a \u201cRestart and update\u201d row appears at the foot of the sidebar; one click completes it.',
