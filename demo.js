@@ -195,8 +195,48 @@
     } else cycle();
   }
 
-  /* 幽灵下一句 demo:轮播几条灰字建议(整条浮现,如真实预测抵达) */
+  /* 编辑器 mini demo:文件开着的时候被智能体改了一处 → 改动就地标出并给出说明行 →
+     「看过了」之后标记退去。与应用内一致:改动已生效,标记只是把它指出来。 */
+  function initEditorDemo() {
+    var root = document.querySelector('[data-editor-demo]');
+    if (!root) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      root.classList.add('changed');
+      return;
+    }
+    var timer = null, running = false;
+    function cycle() {
+      root.classList.remove('changed');
+      timer = setTimeout(function () {
+        root.classList.add('changed');
+        timer = setTimeout(cycle, 4600);
+      }, 1600);
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting && !running) { running = true; cycle(); }
+          else if (!en.isIntersecting && running) { running = false; clearTimeout(timer); }
+        });
+      }, { threshold: 0.4 }).observe(root);
+    } else cycle();
+  }
 
+  /* 首页「下载并安装」那一行的文件名与体积:与下载页同一个来源(downloads/manifest.json),
+     取不到就保持 HTML 里的兜底文案。 */
+  function initInstallCap() {
+    var cap = document.querySelector('[data-dl-cap]');
+    if (!cap) return;
+    fetch('downloads/manifest.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (m) {
+        if (!m || !m.builds) return;
+        var b = m.builds.filter(function (x) { return x.os === 'mac'; })[0];
+        if (!b || !b.file) return;
+        cap.textContent = b.size ? b.file + ' · ' + b.size : b.file;
+      })
+      .catch(function () {});
+  }
 
   /* ---------------- 首页「使用」步骤循环演示 ---------------- */
   function initUsageDemo() {
@@ -236,14 +276,21 @@
     function loopFiles(box, lead) {
       box.classList.add('us-anim');
       var folder = box.querySelector('.cfg-folder');
+      var name = box.querySelector('.cfg-dlg-name[data-type]');
       var files = Array.prototype.slice.call(box.querySelectorAll('.rail-file'));
+      // 真实顺序:先填项目名称,再把文件夹加进来,项目目录里的文件随之可读。
+      function reveal() {
+        if (folder) folder.classList.add('picked');
+        files.forEach(function (f, i) { later(function () { f.classList.add('show'); }, lead + i * 480); });
+        later(run, lead + files.length * 480 + 3000);
+      }
       function run() {
         if (folder) folder.classList.remove('picked');
+        if (name) name.innerHTML = '<span class="ph">' + (name.getAttribute('data-ph') || '') + '</span>';
         files.forEach(function (f) { f.classList.remove('show'); });
         later(function () {
-          if (folder) folder.classList.add('picked');
-          files.forEach(function (f, i) { later(function () { f.classList.add('show'); }, lead + i * 480); });
-          later(run, lead + files.length * 480 + 3000);
+          if (name) typeInto(name, reveal);
+          else reveal();
         }, 800);
       }
       run();
@@ -274,7 +321,7 @@
     }
     // 减动效：直接呈现每格的终态，不启动循环
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      sec.querySelectorAll('.cfg-input').forEach(function (inp) { inp.innerHTML = '<span>' + (inp.getAttribute('data-type') || '') + '</span>'; });
+      sec.querySelectorAll('.cfg-input, .cfg-dlg-name[data-type]').forEach(function (inp) { inp.innerHTML = '<span>' + (inp.getAttribute('data-type') || '') + '</span>'; });
       sec.querySelectorAll('.cfg-folder').forEach(function (f) { f.classList.add('picked'); });
       sec.querySelectorAll('[data-us-folder], [data-us-outputs]').forEach(function (box) {
         box.classList.add('us-anim');
@@ -1101,7 +1148,13 @@
           var a = c.querySelector('.dl-btn');
           if (a) { a.setAttribute('href', b.url); a.removeAttribute('aria-disabled'); a.classList.remove('is-soon'); }
           var meta = c.querySelector('.dl-meta');
-          if (meta && b.size) meta.textContent = b.ext + ' · ' + b.size;
+          if (meta && b.size) {
+            // 某个平台的包停在更早的版本时(各平台各自出包),把它自己的版本号说出来,
+            // 不让页头的「当前版本」替它作答。版本号取自 manifest 里的文件名。
+            var v = (b.file || '').match(/-(\d+\.\d+\.\d+)-/);
+            var own = v && m.version && v[1] !== m.version ? ' · v' + v[1] : '';
+            meta.textContent = b.ext + ' · ' + b.size + own;
+          }
           var sha = c.querySelector('.dl-sha');
           if (sha && b.sha256) {
             sha.setAttribute('data-sha', b.sha256);
@@ -1249,6 +1302,8 @@
     initTabs();
     initDownload();
     initTermDemo();
+    initEditorDemo();
+    initInstallCap();
     initUsageDemo();
     document.querySelectorAll('[data-cfgwalk]').forEach(function (root) { new ConfigWalk(root); });
 

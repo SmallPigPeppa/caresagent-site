@@ -5,7 +5,7 @@
   <script>document.documentElement.className += ' js';</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CaresAgent — 下载</title>
-  <meta name="description" content="下载 CaresAgent：中国科学院香港创新研究院人工智能与机器人创新中心（CAIR）研发的 Cares AI 智能体系统。当前版本 v0.4.9：macOS（Apple 芯片）已发布，Windows 与 Linux 版本尚未发布。" />
+  <meta name="description" content="下载 CaresAgent：中国科学院香港创新研究院人工智能与机器人创新中心（CAIR）研发的 Cares AI 智能体系统。当前版本 v0.4.9：macOS（Apple 芯片）与 Windows 已发布，Linux 版本尚未发布。本页并列出各版本的更新日志。" />
     <link rel="icon" type="image/png" sizes="32x32" href="assets/icon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
   <link rel="stylesheet" href="styles.css" />
@@ -14,7 +14,7 @@
   <script>
     window.DEMO_EN_META = {
       title: 'CaresAgent — Download',
-      description: 'Download CaresAgent, the Cares AI agent system developed by the Centre for Artificial Intelligence and Robotics (CAIR), HKISI-CAS. Current version v0.4.9: macOS (Apple silicon) is available; the Windows and Linux builds are not yet released.'
+      description: 'Download CaresAgent, the Cares AI agent system developed by the Centre for Artificial Intelligence and Robotics (CAIR), HKISI-CAS. Current version v0.4.9: macOS (Apple silicon) and Windows are available, the Linux build is not yet released. The changelog for every released version is listed on this page.'
     };
     Object.assign(window.DEMO_EN, {
       'cfg.nav.project': 'Project', 'cfg.nav.model': 'Model', 'cfg.nav.channel': 'Connect phone',
@@ -218,12 +218,12 @@
           </div>
           <div class="cfg-panel">
             <div class="cfg-pane show" data-cfgpane="project">
-              <p class="cfg-pane-title" data-i18n="cfg.proj.title">侧栏「项目」· 新建或打开</p>
-              <div class="cfg-menu">
-                <div class="cfg-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5.5v13M5.5 12h13"/></svg><span data-i18n="cfg.proj.new">新建空项目</span></div>
-                <div class="cfg-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v1H6l-2.5 7V7.5Z"/><path d="M3.5 18.5 6 11h16l-2.5 7.5h-16Z"/></svg><span data-i18n="cfg.proj.open">打开文件夹</span></div>
+              <p class="cfg-pane-title" data-i18n="cfg.proj.title">侧栏「项目」· 新建项目</p>
+              <div class="cfg-dlg">
+                <div class="cfg-dlg-name"><span data-i18n="cfg.proj.name">阿尔茨海默病影像研究</span></div>
+                <div class="cfg-folder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span class="fp">~/research/ad-imaging</span></div>
+                <div class="cfg-dlg-foot"><span class="cfg-dlg-add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5.5v13M5.5 12h13"/></svg><span data-i18n="cfg.proj.add">添加文件夹</span></span><span class="cfg-dlg-go" data-i18n="cfg.proj.create">创建</span></div>
               </div>
-              <div class="cfg-folder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span class="fp">~/research/ad-imaging</span></div>
               <p class="cfg-note" data-i18n="cfg.proj.note">开始前唯一必需的一步：工具在项目目录内运行，输出也写回该目录。</p>
             </div>
             <div class="cfg-pane" data-cfgpane="model">
@@ -244,6 +244,157 @@
         </div>
       </div>
       <p class="reveal" style="text-align:center;font-size:13px;line-height:1.7;color:var(--ink-3);max-width:600px;margin:26px auto 0" data-i18n="dlx.setup.result">模型密钥、渠道令牌、项目与输出等配置与数据均不会上传到 CAIR。</p>
+    </section>
+
+    <!-- ============ 更新日志（已发布版本） ============ -->
+    <section class="section" id="changelog">
+      <div class="section-head reveal">
+        <p class="section-eyebrow" data-i18n="log.eyebrow">更新日志</p>
+        <h2 class="section-title" data-i18n-html="log.title">已发布的<em>版本</em></h2>
+      </div>
+      <ol class="changelog reveal">
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.9</span>
+            <span class="cl-date" data-i18n="log.d13">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i131">应用图标随明暗主题切换，深色模式下 Dock 显示深色版图标。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i132">终端、代码与文稿三个页面的首行位置与左右边距统一，切换页面不再错位。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i133">上下文用量条改用新的分区配色，浅色主题下五段更易分辨。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i134">更新就绪的提示改为顶栏横幅。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.8</span>
+            <span class="cl-date" data-i18n="log.d12">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i121">会话支持重命名。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i122">全应用的悬浮提示统一为自绘气泡，明暗主题样式一致。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i123">报错提示直接显示后端原句，不再夹带 JSON 结构。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.7</span>
+            <span class="cl-date" data-i18n="log.d11">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i111">主输入框重新有了一圈细描边：静止时更轻，聚焦输入时加深一档。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.6</span>
+            <span class="cl-date" data-i18n="log.d10">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i101">更新完成后应用会自动重新打开，不再需要手动启动。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i102">新版本就绪时，侧栏底部出现「重启并更新」，一次点击即可完成。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.5</span>
+            <span class="cl-date" data-i18n="log.d9">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i91">自动更新：「退出并更新」此前可能出现得过早，此时退出不会装上新版本且无任何提示；现在会先显示「准备中…」，只有真正可更新时才提供该操作。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.4</span>
+            <span class="cl-date" data-i18n="log.d8">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i81">浏览器面板的驱动重写：动作在执行那一刻确认目标是否可见、是否被遮挡，导航与加载的完成判定更准确。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i82">链接图标改用应用内协议获取，只发送站点域名，页面地址与查询参数不再出网。</span></li>
+            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i83">界面层的故障现写入与后端同一份日志，不再随提示消失而无从追查。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.3</span>
+            <span class="cl-date" data-i18n="log.d7">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i71">工作簿中的公式格此前按计算结果读取、写入只改单元格本身，可能静默改错他人表格中的公式。</span></li>
+            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i72">文件搜索不再进入隐藏目录，版本库内部与应用自身的状态文件不再混入结果。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.2</span>
+            <span class="cl-date" data-i18n="log.d6">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i61">自动更新：新版本在后台下载，安装在退出应用时完成，不打断使用。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i62">安装包已签名并通过 Apple 公证，首次打开无需在系统设置中手动放行。</span></li>
+            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i63">表格数值：千分位、百分比与货币、科学计数与分数不再被存成文本。</span></li>
+            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i64">扫描件表格的合并单元格不再错列，图片方向按 EXIF 还原。</span></li>
+            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i65">损坏的配置或索引不再导致应用无法启动。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.1</span>
+            <span class="cl-date" data-i18n="log.d5">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i51">接入 Qwen 等推理模型时，思考内容可能混入回答正文的问题。</span></li>
+            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i52">外接（MCP）工具的参数现按声明矫正类型，宽松类型的调用不再失败。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i53">推理内容的回传更稳健，避免部分模型服务拒绝后续请求。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.4.0</span>
+            <span class="cl-date" data-i18n="log.d4">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i41">内置编辑器：文档、表格、幻灯片与 PDF 在应用内打开，查看与修改在同一个面上完成。</span></li>
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i42">逐块修改：Word、PowerPoint 与 Excel 按段落、单元格与幻灯片修改，不必整份重写。</span></li>
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i43">工作区文件树：项目目录在面板内浏览，任一文件可直接打开。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i44">文件读取：模型可读取文件的文字，也可查看其版面，扫描件与图表按版面呈现。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.3.0</span>
+            <span class="cl-date" data-i18n="log.d3">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i31">记忆：已确认的事实与研究者的偏好跨会话保留，在界面内可查看、修改与删除。</span></li>
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i32">会话内作图：回答中的流程图与图示就地渲染，可复制或另存为 SVG / PNG。</span></li>
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i33">面板多标签：终端与浏览器可同时保留多个标签，并有键盘快捷键在其间切换。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i34">网页操作：一次调用完成一组页面动作，填写整张表单不再逐个字段往返。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.2.0</span>
+            <span class="cl-date" data-i18n="log.d2">2026 年 8 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i21">定时任务：按设定的时间自动发起会话，结果照常留在会话记录里。</span></li>
+            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i22">技能管理：技能包在界面内整包增删改，不再需要手动改文件。</span></li>
+            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i23">会话时间线重构：已结算的回合不再重绘，长会话滚动更稳。</span></li>
+          </ul>
+        </li>
+        <li class="cl-entry">
+          <div class="cl-meta">
+            <span class="cl-ver">v0.1.0</span>
+            <span class="cl-date" data-i18n="log.d1">2026 年 6 月</span>
+          </div>
+          <ul class="cl-items">
+            <li><span class="cl-tag" data-i18n="log.first">首发</span><span data-i18n="log.i11">首个公开版本：macOS 与 Windows 桌面端，含项目与会话、工具调用、权限问询与消息渠道。</span></li>
+          </ul>
+        </li>
+      </ol>
+      <a class="cl-more reveal" href="https://github.com/SmallPigPeppa/caresagent-site/releases" target="_blank" rel="noopener" data-i18n="log.more">全部版本与安装包 →</a>
     </section>
 
     <!-- ============ 克制的下一步（取代重复的大卡片） ============ -->

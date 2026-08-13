@@ -99,10 +99,14 @@
         <div class="shot reveal" aria-hidden="true">
           <div class="shot-glow"></div>
           <div class="app-window">
-            <div class="app-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><div class="tb-aurora"><i></i></div><span class="app-title" data-i18n="shot.title">阿尔茨海默病影像研究 — CaresAgent</span><span class="tb-toggles"><svg class="active" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M14.5 4.5v15"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m7.5 9 3 3-3 3M12.5 15H17" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9Z"/></svg></span></div>
+            <div class="app-titlebar"><span class="tl tl-r"></span><span class="tl tl-y"></span><span class="tl tl-g"></span><div class="tb-aurora"><i></i></div><span class="app-title" data-i18n="shot.title">阿尔茨海默病影像研究 — CaresAgent</span><span class="tb-toggles"><svg class="active" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 16.5v-5M12 8h.01" stroke-linecap="round"/></svg><span class="tb-sep" aria-hidden="true"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="m7.5 9 3 3-3 3M12.5 15H17" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.7 2.6 4 5.6 4 9s-1.3 6.4-4 9c-2.7-2.6-4-5.6-4-9s1.3-6.4 4-9Z"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5.2 12h.01M12 12h.01M18.8 12h.01" stroke-linecap="round"/></svg></span></div>
             <div class="app-body">
               <aside class="app-side">
-                <div class="side-new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h8.5M16.6 3.9a2 2 0 0 1 2.8 2.8L8.5 17.6 4.7 18.6l1-3.8L16.6 3.9Z"/></svg><span data-i18n="shot.new">新对话</span></div>
+                <div class="side-nav">
+                  <div class="side-act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h8.5M16.6 3.9a2 2 0 0 1 2.8 2.8L8.5 17.6 4.7 18.6l1-3.8L16.6 3.9Z"/></svg><span data-i18n="shot.new">新对话</span></div>
+                  <div class="side-act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><rect x="3.5" y="3.5" width="8" height="8" rx="1.6"/><rect x="12.5" y="12.5" width="8" height="8" rx="1.6"/><rect x="12.5" y="3.5" width="8" height="8" rx="1.6"/></svg><span data-i18n="shot.skillsNav">技能</span></div>
+                  <div class="side-act"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.4"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3M12 13v2.6l1.8 1.2"/></svg><span data-i18n="shot.schedules">定时任务</span></div>
+                </div>
                 <div class="side-label" data-i18n="shot.projects">项目</div>
                 <div class="side-row active"><span class="side-ico g1"></span><span data-i18n="shot.p1">阿尔茨海默病影像研究</span></div>
                 <div class="side-row sub active"><span data-i18n="shot.s1">论文汇报 PPT 生成</span></div>
@@ -118,15 +122,15 @@
                 <div class="chat-bubble user" data-i18n="shot.user">把这篇 PDF 综述整理成 15 页研究汇报 PPT，图表用论文原图。</div>
                 <div class="chat-card process">
                   <div class="process-head"><span class="spin"></span><span class="process-name" data-i18n="shot.proc">运行中</span><span class="process-time">02:41</span></div>
-                  <ul class="process-steps"><li class="done"><span data-i18n="shot.st1">读取文件 · review_2026.pdf</span></li><li class="done"><span data-i18n="shot.st2">执行 Python · extract_figures.py</span></li><li class="live"><span data-i18n="shot.st3">正在生成幻灯片大纲…</span></li></ul>
+                  <ul class="process-steps"><li class="done"><span data-i18n="shot.st1">读取 · review_2026.pdf</span></li><li class="done"><span data-i18n="shot.st2">执行 Python · extract_figures.py</span></li><li class="live"><span data-i18n="shot.st3">正在生成幻灯片大纲…</span></li></ul>
                 </div>
                 <div class="chat-card answer"><p data-i18n="shot.ans">已完成图表筛选：保留 Figure 2/4/7 与 Table 1，分辨率均满足放映要求。大纲将按「背景 → 方法 → 影像学发现 → 结论」展开…</p><span class="caret"></span></div>
-                <div class="chat-composer ghosted"><span class="ghost-text" data-i18n="shot.ghost">把 Figure 7 放大为整页大图，再导出一份 PDF 版本</span><span class="ghost-hint" data-i18n="shot.ghostHint">回车直接发送</span><span class="composer-send"><svg viewBox="0 0 16 16" fill="none"><path d="M8 12.5v-9m0 0L4.5 7M8 3.5 11.5 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+                <div class="chat-composer ghosted"><span class="ghost-text" data-i18n="shot.ghost">把 Figure 7 放大为整页大图，再导出一份 PDF 版本</span><span class="ghost-hint" data-i18n="shot.ghostHint">Tab 补全，回车直接发送</span><span class="composer-send"><svg viewBox="0 0 16 16" fill="none"><path d="M8 12.5v-9m0 0L4.5 7M8 3.5 11.5 7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
               </div>
               <aside class="app-rail">
                 <div class="rail-cap" data-i18n="shot.railcap">会话信息</div>
+                <div class="rail-sec"><div class="rail-head" data-i18n="shot.perms">授权</div><div class="rail-chip ok"><span data-i18n="shot.pm1">Shell 终端权限</span></div></div>
                 <div class="rail-sec"><div class="rail-head" data-i18n="shot.skills">技能</div><div class="rail-chip ok"><span data-i18n="shot.sk1">paper_ppt</span></div><div class="rail-chip ok"><span data-i18n="shot.sk2">pdf_screenshot</span></div></div>
-                <div class="rail-sec"><div class="rail-head" data-i18n="shot.perms">授权</div><div class="rail-chip ok"><span data-i18n="shot.pm1">执行命令 · 本项目</span></div></div>
                 <div class="rail-sec"><div class="rail-head" data-i18n="shot.outputs">输出</div><div class="rail-file"><span class="f-ico pdf">PDF</span><span>review_2026.pdf</span></div><div class="rail-file"><span class="f-ico img">PNG</span><span>figures/ · 9</span></div><div class="rail-file"><span class="f-ico ppt">PPT</span><span>slides_draft.pptx</span></div></div>
                 <div class="rail-sec"><div class="rail-head" data-i18n="shot.plan">任务规划</div><div class="rail-step done"><span data-i18n="shot.pl1">解析 PDF 结构</span></div><div class="rail-step done"><span data-i18n="shot.pl2">截取论文图表</span></div><div class="rail-step live"><span data-i18n="shot.pl3">生成大纲与分页</span></div><div class="rail-step"><span data-i18n="shot.pl4">渲染 PPTX</span></div></div>
               </aside>
@@ -154,17 +158,44 @@
       </div>
     </section>
 
-    <!-- ============ 系统设计:项目 / 会话 / 执行 ============ -->
-    <section class="section" id="design">
+    <!-- ============ 组成:项目 / 会话 / 工具 / 技能 / 记忆 / 定时任务 ============ -->
+    <section class="section" id="parts">
       <div class="section-head reveal">
-        <p class="section-eyebrow" data-i18n="design.eyebrow">系统设计</p>
-        <h2 class="section-title" data-i18n-html="design.title">项目、会话与<em>执行</em></h2>
-        <p class="section-sub" data-i18n="design.sub">系统以项目、会话、执行三层组织工作；完整的运行机制见「系统原理」。</p>
+        <p class="section-eyebrow" data-i18n="parts.eyebrow">组成</p>
+        <h2 class="section-title" data-i18n-html="parts.title">系统的<em>组成</em></h2>
+        <p class="section-sub" data-i18n="parts.sub">项目与会话组织工作，工具在项目目录内执行，技能、记忆与定时任务决定智能体带着什么开始、在什么时刻开始。完整的运行机制见「系统原理」。</p>
       </div>
-      <div class="spec-strip reveal" style="margin-top:44px">
-        <div class="spec-item"><span class="sk" data-i18n="design.t1">项目</span><span class="sv" data-i18n="design.d1">一个工作目录对应一个研究课题：文献、数据与输出集中存放在该目录内。</span></div>
-        <div class="spec-item"><span class="sk" data-i18n="design.t2">会话</span><span class="sv" data-i18n="design.d2">一次任务对应一个会话：计划、执行过程与输出完整留存，可随时回看。</span></div>
-        <div class="spec-item"><span class="sk" data-i18n="design.t3">执行</span><span class="sv" data-i18n="design.d3">智能体组合工具（文件、终端、浏览器）与技能（论文解析、PPT 生成等）完成任务。</span></div>
+      <div class="feature-grid">
+        <article class="feature-card reveal">
+          <div class="feature-ico i-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg></div>
+          <h3 data-i18n="parts.t1">项目</h3>
+          <p data-i18n="parts.d1">一个项目对应电脑上的一个工作目录。文献、数据与生成的文件都在该目录内；文件类工具的写入限于此目录，目录之外只读。</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-ico i-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5h16M4 12h16M4 17.5h9"/></svg></div>
+          <h3 data-i18n="parts.t2">会话</h3>
+          <p data-i18n="parts.d2">一次任务对应一个会话。对话内容、每一次工具调用、任务规划与输出完整留存，重新打开即可回看；会话可以重命名、置顶与搜索。</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-ico i-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.6"/><path d="m7.5 10 2.5 2.5L7.5 15M13 15h3.5"/></svg></div>
+          <h3 data-i18n="parts.t3">工具</h3>
+          <p data-i18n="parts.d3">文件读写与搜索、终端命令与 Python、浏览器操作、文档解析与生成（Word、Excel、PowerPoint、PDF）、打印与消息发送。终端命令与对外发送先经用户确认。</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-ico i-violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><rect x="3.5" y="3.5" width="8" height="8" rx="1.8"/><rect x="12.5" y="3.5" width="8" height="8" rx="1.8"/><rect x="12.5" y="12.5" width="8" height="8" rx="1.8"/></svg></div>
+          <h3 data-i18n="parts.t4">技能</h3>
+          <p data-i18n="parts.d4">技能是可加载的说明与资源包：一份说明文件及其资源，模型依据一句话说明决定是否加载。系统自带 5 个；技能库存在本机，可新建、导入、修改与停用。</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-ico i-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h11a1.5 1.5 0 0 1 1.5 1.5v15.5l-7-3.6-7 3.6V5a1.5 1.5 0 0 1 1.5-1.5Z"/></svg></div>
+          <h3 data-i18n="parts.t5">记忆</h3>
+          <p data-i18n="parts.d5">已确认的事实按用户、反馈、项目、索引四类保存，跨会话保留。输入框上方的「上下文用量」列出当前载入的记忆，可逐条查看、修改与删除。</p>
+        </article>
+        <article class="feature-card reveal">
+          <div class="feature-ico i-red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.4"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3M12 13v2.6l1.8 1.2"/></svg></div>
+          <h3 data-i18n="parts.t6">定时任务</h3>
+          <p data-i18n="parts.d6">按每天、工作日、每周或仅一次的设定自动运行一段提示词。每次运行都是所属项目里的一段普通会话，结果照常留在会话记录中。</p>
+        </article>
       </div>
       <div style="display:flex;justify-content:center;margin-top:32px" class="reveal">
         <a class="btn btn-ghost btn-sm" href="architecture.html" data-i18n="design.more">系统原理 →</a>
@@ -176,7 +207,7 @@
       <div class="section-head reveal">
         <p class="section-eyebrow" data-i18n="wn.eyebrow">交互</p>
         <h2 class="section-title" data-i18n-html="wn.title">用户与智能体的<em>交互</em></h2>
-        <p class="section-sub" data-i18n="wn.sub">终端与浏览器由用户与智能体共用：执行过程实时可见，用户可随时直接操作。</p>
+        <p class="section-sub" data-i18n="wn.sub">对话右侧的面板有四页：会话信息、终端、浏览器、编辑器。终端与浏览器由用户与智能体共用，执行过程实时可见，用户可随时直接操作。</p>
       </div>
 
       <div class="wn-row reveal">
@@ -202,6 +233,41 @@
       <div class="wn-row reveal">
         <div class="wn-copy">
           <span class="wn-no">02</span>
+          <h3 data-i18n="wn.e.t">编辑器</h3>
+          <p data-i18n="wn.e.d">文档、表格、幻灯片、PDF 与图片在应用内打开，读与改在同一个面上完成。面板左侧是项目的文件树，任一文件都可直接打开；智能体改过的文件在打开时逐处标出改动，每一处都能单独退回。</p>
+        </div>
+        <div class="wn-visual">
+          <div class="wn-panel wn-editor" data-editor-demo>
+            <div class="wn-panel-tabs">
+              <span class="wpt active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M6.5 3.5h7L18 8v12.5H6.5V3.5Z"/><path d="M13.5 3.5V8H18"/></svg>findings.md</span>
+              <span class="wpt">cohort.csv</span>
+            </div>
+            <div class="we-note">
+              <span class="we-note-t" data-i18n="wn.e.banner">CaresAgent 改了这份文件，改动已生效；每一处都能单独退回。</span>
+              <span class="we-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg><span data-i18n="wn.e.ok">看过了</span></span>
+            </div>
+            <div class="we-body">
+              <div class="we-tree">
+                <div class="we-t-row root"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span data-i18n="wn.e.root">项目</span></div>
+                <div class="we-t-row">review_2026.pdf</div>
+                <div class="we-t-row on">findings.md</div>
+                <div class="we-t-row">cohort.csv</div>
+                <div class="we-t-row">figures/</div>
+              </div>
+              <div class="we-doc">
+                <p class="we-h" data-i18n="wn.e.h">影像学发现</p>
+                <p class="we-p" data-i18n="wn.e.p1">本节汇总队列的影像学测量结果。</p>
+                <p class="we-p we-changed" data-i18n="wn.e.p2">表 1 的体积单位由 mm³ 统一为 cm³，正文数值同步换算。</p>
+                <p class="we-p" data-i18n="wn.e.p3">图 4 按分组给出对比。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wn-row reveal">
+        <div class="wn-copy">
+          <span class="wn-no">03</span>
           <h3 data-i18n="wn.c.t">选择卡</h3>
           <p data-i18n="wn.c.d">执行中遇到需要由用户决定的分支（大纲结构、图表取舍、方法选择），智能体暂停并列出可选项，卡片显示在输入框上方；选定后继续执行，用户也可以直接输入其他答案。</p>
           <a class="wn-link" href="architecture.html" data-i18n="wn.c.link">系统原理 →</a>
@@ -229,7 +295,7 @@
         <div class="wn-copy">
           <span class="wn-no">01</span>
           <h3 data-i18n="usage.s1t">下载并安装</h3>
-          <p data-i18n="usage.s1d">下载对应平台的安装包：macOS 版拖入「应用程序」，Windows 版运行安装程序。当前为研究预览版，macOS 首次启动若被系统拦截，右键应用图标选「打开」。</p>
+          <p data-i18n="usage.s1d">下载对应平台的安装包：macOS 版拖入「应用程序」，Windows 版运行安装程序。安装包已签名并通过 Apple 公证，首次打开无需在系统设置中放行；此后的新版本在后台下载，退出应用时完成安装。</p>
         </div>
         <div class="wn-visual">
           <div class="wn-choice" data-us-install>
@@ -238,7 +304,8 @@
               <span class="us-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M14 6.5l5.5 5.5-5.5 5.5"/></svg></span>
               <span class="us-apps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span data-i18n="usage.m1apps">应用程序</span></span>
             </div>
-            <div class="us-cap">CaresAgent-0.4.9-mac-arm64.dmg · 219 MB</div>
+            <!-- 文件名与体积只有一个来源：downloads/manifest.json（demo.js 填写）。 -->
+            <div class="us-cap" data-dl-cap>CaresAgent-mac-arm64.dmg</div>
           </div>
         </div>
       </div>
@@ -246,17 +313,17 @@
       <div class="wn-row reveal">
         <div class="wn-copy">
           <span class="wn-no">02</span>
-          <h3 data-i18n="usage.s2t">新建或打开项目</h3>
-          <p data-i18n="usage.s2d">在左侧栏「项目」菜单中新建空项目，或把已有文件夹作为项目打开；论文 PDF、扫描件与数据文件置于项目目录内即可被读取。这是开始前唯一必需的一步。</p>
+          <h3 data-i18n="usage.s2t">新建项目</h3>
+          <p data-i18n="usage.s2d">在左侧栏「项目」一栏的 + 里新建项目：填一个名称，并把已有的文件夹加进来。论文 PDF、扫描件与数据文件置于项目目录内即可被读取。这是开始前唯一必需的一步。</p>
         </div>
         <div class="wn-visual">
           <div class="wn-choice" data-us-folder>
-            <p class="cfg-pane-title" data-i18n="cfg.proj.title">侧栏「项目」· 新建或打开</p>
-            <div class="cfg-menu">
-              <div class="cfg-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5.5v13M5.5 12h13"/></svg><span data-i18n="cfg.proj.new">新建空项目</span></div>
-              <div class="cfg-menu-item hl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v1H6l-2.5 7V7.5Z"/><path d="M3.5 18.5 6 11h16l-2.5 7.5h-16Z"/></svg><span data-i18n="cfg.proj.open">打开文件夹</span></div>
+            <p class="cfg-pane-title" data-i18n="cfg.proj.title">侧栏「项目」· 新建项目</p>
+            <div class="cfg-dlg">
+              <div class="cfg-dlg-name" data-type="阿尔茨海默病影像研究" data-ph="我的项目"><span data-i18n="cfg.proj.name">阿尔茨海默病影像研究</span></div>
+              <div class="cfg-folder picked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span class="fp">~/research/ad-imaging</span></div>
+              <div class="cfg-dlg-foot"><span class="cfg-dlg-add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5.5v13M5.5 12h13"/></svg><span data-i18n="cfg.proj.add">添加文件夹</span></span><span class="cfg-dlg-go" data-i18n="cfg.proj.create">创建</span></div>
             </div>
-            <div class="cfg-folder picked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2.5h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2V7.5Z"/></svg><span class="fp">~/research/ad-imaging</span></div>
             <div class="us-files">
               <div class="rail-file"><span class="f-ico pdf">PDF</span><span>review_2026.pdf</span></div>
               <div class="rail-file"><span class="f-ico img">PNG</span><span>scans/ · 12</span></div>
@@ -293,7 +360,7 @@
             <div class="chat-bubble user" data-i18n="usage.m4u">把这篇综述整理成 15 页汇报 PPT，图表用论文原图。</div>
             <div class="chat-card process">
               <div class="process-head"><span class="spin"></span><span class="process-name" data-i18n="usage.m4p">运行中</span><span class="process-time">00:42</span></div>
-              <ul class="process-steps"><li class="done"><span data-i18n="usage.m4s1">读取文件 · review_2026.pdf</span></li><li class="live"><span data-i18n="usage.m4s2">正在提取原文图表…</span></li><li><span data-i18n="usage.m4s3">生成 PPT · slides_draft.pptx</span></li></ul>
+              <ul class="process-steps"><li class="done"><span data-i18n="usage.m4s1">读取 · review_2026.pdf</span></li><li class="live"><span data-i18n="usage.m4s2">正在提取原文图表…</span></li><li><span data-i18n="usage.m4s3">生成 PPT · slides_draft.pptx</span></li></ul>
             </div>
           </div>
         </div>
@@ -303,7 +370,7 @@
         <div class="wn-copy">
           <span class="wn-no">05</span>
           <h3 data-i18n="usage.s5t">取得成果</h3>
-          <p data-i18n="usage.s5d">幻灯片、报告与图表写入项目目录，并列入会话的输出栏；会话全程留存，每一步都可以回看。</p>
+          <p data-i18n="usage.s5d">幻灯片、报告与图表写入项目目录，并列入「会话信息」的输出一栏；会话全程留存，每一步都可以回看。</p>
         </div>
         <div class="wn-visual">
           <div class="wn-choice" data-us-outputs>
@@ -347,158 +414,6 @@
           <span class="hub-more" data-i18n="home.enter">详细说明 →</span>
         </a>
       </div>
-    </section>
-
-
-    <!-- ============ 更新日志（已发布版本） ============ -->
-    <section class="section" id="changelog">
-      <div class="section-head reveal">
-        <p class="section-eyebrow" data-i18n="log.eyebrow">更新日志</p>
-        <h2 class="section-title" data-i18n-html="log.title">已发布的<em>版本</em></h2>
-      </div>
-      <ol class="changelog reveal">
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.9</span>
-            <span class="cl-date" data-i18n="log.d13">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i131">应用图标随明暗主题切换，深色模式下 Dock 显示深色版图标。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i132">终端、代码与文稿三个页面的首行位置与左右边距统一，切换页面不再错位。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i133">上下文用量条改用新的分区配色，浅色主题下五段更易分辨。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i134">更新就绪的提示改为顶栏横幅。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.8</span>
-            <span class="cl-date" data-i18n="log.d12">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i121">会话支持重命名。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i122">全应用的悬浮提示统一为自绘气泡，明暗主题样式一致。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i123">报错提示直接显示后端原句，不再夹带 JSON 结构。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.7</span>
-            <span class="cl-date" data-i18n="log.d11">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i111">主输入框重新有了一圈细描边：静止时更轻，聚焦输入时加深一档。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.6</span>
-            <span class="cl-date" data-i18n="log.d10">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i101">更新完成后应用会自动重新打开，不再需要手动启动。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i102">新版本就绪时，侧栏底部出现「重启并更新」，一次点击即可完成。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.5</span>
-            <span class="cl-date" data-i18n="log.d9">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i91">自动更新：「退出并更新」此前可能出现得过早，此时退出不会装上新版本且无任何提示；现在会先显示「准备中…」，只有真正可更新时才提供该操作。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.4</span>
-            <span class="cl-date" data-i18n="log.d8">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i81">浏览器面板的驱动重写：动作在执行那一刻确认目标是否可见、是否被遮挡，导航与加载的完成判定更准确。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i82">链接图标改用应用内协议获取，只发送站点域名，页面地址与查询参数不再出网。</span></li>
-            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i83">界面层的故障现写入与后端同一份日志，不再随提示消失而无从追查。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.3</span>
-            <span class="cl-date" data-i18n="log.d7">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i71">工作簿中的公式格此前按计算结果读取、写入只改单元格本身，可能静默改错他人表格中的公式。</span></li>
-            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i72">文件搜索不再进入隐藏目录，版本库内部与应用自身的状态文件不再混入结果。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.2</span>
-            <span class="cl-date" data-i18n="log.d6">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i61">自动更新：新版本在后台下载，安装在退出应用时完成，不打断使用。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i62">安装包已签名并通过 Apple 公证，首次打开无需在系统设置中手动放行。</span></li>
-            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i63">表格数值：千分位、百分比与货币、科学计数与分数不再被存成文本。</span></li>
-            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i64">扫描件表格的合并单元格不再错列，图片方向按 EXIF 还原。</span></li>
-            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i65">损坏的配置或索引不再导致应用无法启动。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.1</span>
-            <span class="cl-date" data-i18n="log.d5">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i51">接入 Qwen 等推理模型时，思考内容可能混入回答正文的问题。</span></li>
-            <li><span class="cl-tag" data-i18n="log.fix">修复</span><span data-i18n="log.i52">外接（MCP）工具的参数现按声明矫正类型，宽松类型的调用不再失败。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i53">推理内容的回传更稳健，避免部分模型服务拒绝后续请求。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.4.0</span>
-            <span class="cl-date" data-i18n="log.d4">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i41">内置编辑器：文档、表格、幻灯片与 PDF 在应用内打开，查看与修改在同一个面上完成。</span></li>
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i42">逐块修改：Word、PowerPoint 与 Excel 按段落、单元格与幻灯片修改，不必整份重写。</span></li>
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i43">工作区文件树：项目目录在面板内浏览，任一文件可直接打开。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i44">文件读取：模型可读取文件的文字，也可查看其版面，扫描件与图表按版面呈现。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.3.0</span>
-            <span class="cl-date" data-i18n="log.d3">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i31">记忆：已确认的事实与研究者的偏好跨会话保留，在界面内可查看、修改与删除。</span></li>
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i32">会话内作图：回答中的流程图与图示就地渲染，可复制或另存为 SVG / PNG。</span></li>
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i33">面板多标签：终端与浏览器可同时保留多个标签，并有键盘快捷键在其间切换。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i34">网页操作：一次调用完成一组页面动作，填写整张表单不再逐个字段往返。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.2.0</span>
-            <span class="cl-date" data-i18n="log.d2">2026 年 8 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i21">定时任务：按设定的时间自动发起会话，结果照常留在会话记录里。</span></li>
-            <li><span class="cl-tag" data-i18n="log.add">新增</span><span data-i18n="log.i22">技能管理：技能包在界面内整包增删改，不再需要手动改文件。</span></li>
-            <li><span class="cl-tag" data-i18n="log.imp">改进</span><span data-i18n="log.i23">会话时间线重构：已结算的回合不再重绘，长会话滚动更稳。</span></li>
-          </ul>
-        </li>
-        <li class="cl-entry">
-          <div class="cl-meta">
-            <span class="cl-ver">v0.1.0</span>
-            <span class="cl-date" data-i18n="log.d1">2026 年 6 月</span>
-          </div>
-          <ul class="cl-items">
-            <li><span class="cl-tag" data-i18n="log.first">首发</span><span data-i18n="log.i11">首个公开版本：macOS 与 Windows 桌面端，含项目与会话、工具调用、权限问询与消息渠道。</span></li>
-          </ul>
-        </li>
-      </ol>
-      <a class="cl-more reveal" href="https://github.com/SmallPigPeppa/caresagent-site/releases" target="_blank" rel="noopener" data-i18n="log.more">全部版本与安装包 →</a>
     </section>
   </main>
 
