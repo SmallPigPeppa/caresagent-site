@@ -15,11 +15,11 @@
       "os": "win",
       "arch": "x64",
       "ext": ".exe",
-      "file": "CaresAgent-0.1.0-win-x64.exe",
-      "url": "https://github.com/SmallPigPeppa/caresagent-site/releases/download/v0.1.0/CaresAgent-0.1.0-win-x64.exe",
-      "size": "200 MB",
-      "bytes": 209736575,
-      "sha256": "e33c5f51f200144317a80c46ecb3eb00a9d0f9dcea312ebf96d2787f280642b3"
+      "file": "CaresAgent-0.4.9-win-x64.exe",
+      "url": "https://github.com/SmallPigPeppa/caresagent-site/releases/download/v0.4.9/CaresAgent-0.4.9-win-x64.exe",
+      "size": "181 MB",
+      "bytes": 189667023,
+      "sha256": "dce9d08db872e98210e8cb0247edde8b4df4f4abb45d49dc41c9ec81a9bb6817"
     }
   ]
 }
